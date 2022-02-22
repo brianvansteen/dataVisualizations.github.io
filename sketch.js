@@ -23,7 +23,6 @@ function setup() {
     gallery.addVisual(new PayGapByJob2017());
     gallery.addVisual(new PayGapTimeSeries());
     gallery.addVisual(new UKFoodOpinions());
-    gallery.addVisual(new UKFoodConsumption());
     gallery.addVisual(new UKFoodNutrients());
 
     //gallery.addVisual(new Waffle());

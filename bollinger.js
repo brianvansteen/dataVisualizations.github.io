@@ -7,11 +7,11 @@ function Bollinger() {
     this.id = 'TSLA-stock-price';
 
     // title to display above the plot.
-    this.title = 'Tesla stock price (5 years / 1,259 trading days)';
+    this.title = 'Tesla Stock Price (5 years / 1,259 trading days)';
 
     // Names for each axis.
-    this.xAxisLabel = 'Number of trading days';
-    this.yAxisLabel = 'U.S. dollars';
+    this.xAxisLabel = 'Number of Trading Days';
+    this.yAxisLabel = 'U.S. dollars ($)';
 
     var marginSize = 50;
 
@@ -87,18 +87,18 @@ function Bollinger() {
         this.select1.style('color', 'blueviolet');
         this.select1.style('background-color', 'lavender');
         this.select1.style('text-align', 'center');
-        let smaValue1 = [1, 20, 50, 100, 200]
+        let smaValue1 = [1, 20, 50, 100, 200] // values for the dropdown menu
         for (let i = 0; i < smaValue1.length; i++) {
             this.select1.option(smaValue1[i]); // each dropdown value
         }
 
         this.select2 = createSelect(); // create dropdown menu in DOM
         this.select2.position(this.layout.rightMargin * 1.25, height - 65); // place dropdown at x, y on canvas
-        this.select2.style('font-size', '18px');
+        this.select2.style('font-size', '12px');
         this.select2.style('color', 'blueviolet');
         this.select2.style('background-color', 'lavender');
         this.select2.style('text-align', 'center');
-        let smaValue2 = [20, 50, 100, 200]
+        let smaValue2 = [20] // value for the dropdown menu
         for (let i = 0; i < smaValue2.length; i++) {
             this.select2.option(smaValue2[i]); // each dropdown value
         }
@@ -109,7 +109,7 @@ function Bollinger() {
         this.select3.style('color', 'blueviolet');
         this.select3.style('background-color', 'lavender');
         this.select3.style('text-align', 'center');
-        let sdValue = [2, 3, 4]
+        let sdValue = [2, 3, 4] // values for the dropdown menu
         for (let i = 0; i < sdValue.length; i++) {
             this.select3.option(sdValue[i]); // each dropdown value
         }
@@ -139,14 +139,14 @@ function Bollinger() {
 
         drawAxis(this.layout); // draw x and y axis; helper function
 
-        drawAxisLabels(this.xAxisLabel, // draw x and y axis labels; helper function
+        drawAxisLabels(this.xAxisLabel, // draw x and y axis labels; from helper function
             this.yAxisLabel,
             this.layout);
 
         drawAxisSubLabels(this.startDay, this.midDay, this.endDay, this.layout); // draw x and y axis labels; helper function
 
         drawDropDownTitle("Simple Moving Average (days)", this.layout);
-        drawDropDownTitle2("Simple Moving Average default (days)", this.layout);
+        drawDropDownTitle2("(Default Simple Moving Average, days)", this.layout);
         drawDropDownTitle3("Bollinger bands (standard deviations)", this.layout);
 
         // Plot all stock prices between startDate and endDate using the width of the canvas minus margins.

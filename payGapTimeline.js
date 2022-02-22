@@ -14,7 +14,7 @@ function PayGapTimeSeries() {
     this.xAxisLabel = 'Year';
     this.yAxisLabel = 'Pay Gap Percentage';
 
-    var marginSize = 35;
+    var marginSize = 50;
 
     // Layout object to store all common plot layout parameters and
     // methods.
@@ -26,7 +26,7 @@ function PayGapTimeSeries() {
         leftMargin: marginSize * 2,
         rightMargin: width - marginSize,
         topMargin: marginSize,
-        bottomMargin: height - marginSize * 2,
+        bottomMargin: height - marginSize * 3,
         pad: 5,
 
         plotWidth: function() {
@@ -54,7 +54,7 @@ function PayGapTimeSeries() {
     this.preload = function() {
         var self = this;
         this.data = loadTable(
-            './data/pay-gap/all-employees-hourly-pay-by-gender-1997-2017.csv', 'csv', 'header',
+            './data/payGap/all-employees-hourly-pay-by-gender-1997-2017.csv', 'csv', 'header',
             // Callback function to set the value
             // this.loaded to true.
             function(table) {

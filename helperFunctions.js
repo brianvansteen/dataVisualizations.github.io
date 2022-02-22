@@ -63,8 +63,8 @@ function drawDropDownTitle(label, layout) {
 function drawDropDownTitle2(label, layout) {
     fill(138, 43, 226);
     push();
-    textSize(16);
-    textStyle(BOLD);
+    textSize(14);
+    textStyle(ITALIC);
     textAlign(RIGHT);
     text(label,
         layout.rightMargin * 0.97,
@@ -139,10 +139,10 @@ function drawAxisLabels(xLabel, yLabel, layout) {
 
     // Draw x-axis label
     push();
-    textSize(22);
+    textSize(24);
     text(xLabel,
         (layout.plotWidth() / 2) + layout.leftMargin,
-        layout.bottomMargin + (layout.marginSize * 1.5));
+        layout.bottomMargin + (layout.marginSize * 2));
     pop();
 
     // Draw y-axis label

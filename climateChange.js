@@ -23,7 +23,7 @@ function ClimateChange() {
         leftMargin: marginSize * 2,
         rightMargin: width - marginSize,
         topMargin: marginSize * 2,
-        bottomMargin: height - marginSize * 2,
+        bottomMargin: height - marginSize * 3,
         pad: 5,
 
         plotWidth: function() {
@@ -50,7 +50,7 @@ function ClimateChange() {
     this.preload = function() {
         var self = this;
         this.data = loadTable(
-            './data/surface-temperature/surface-temperature.csv', 'csv', 'header',
+            './data/surfaceTemperature/surface-temperature.csv', 'csv', 'header',
             // Callback function to set the value this.loaded to true.
             function(table) {
                 self.loaded = true;

@@ -25,7 +25,7 @@ function UKFoodNutrients() {
         leftMargin: marginSize * 2,
         rightMargin: width - marginSize,
         topMargin: marginSize * 2,
-        bottomMargin: height - marginSize * 2,
+        bottomMargin: height - marginSize * 3,
         pad: 5,
 
         plotWidth: function() {

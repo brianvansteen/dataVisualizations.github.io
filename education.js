@@ -65,7 +65,7 @@ function Education() {
         var labels = this.data.getColumn(0); // from loadTable; column 0
 
         // Colour to use for each category.
-        var colours = ['blue', 'red', 'green', 'pink', 'purple', 'yellow'];
+        var colours = ['#000080', '#800000', '#006400', '#FF1493', '#8B008B', '#FF8C00'];
 
         // Make a title.
         var title = 'Level of education for: ' + geography;

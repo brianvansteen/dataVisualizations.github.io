@@ -36,10 +36,11 @@ function DoughnutChart(x, y, diameter) {
         var angleStart = 0; // start at 0
         var colour;
 
-        let mouseDist = dist(this.x, this.y, mouseX, mouseY);
-        let mouseAngle = createVector(1, 0).angleBetween(createVector(mouseX - this.x, mouseY - this.y));
+        let mouseDist = dist(this.x, this.y, mouseX, mouseY); // distance from center of doughnut
+        let mouseAngle = createVector(100, 0).angleBetween(createVector(mouseX - this.x, mouseY - this.y));
+        // calculate angle, in radians, between vector(100,0) and vector of mouse position versus center of doughnut
         if (mouseAngle < 0) {
-            mouseAngle += TWO_PI;
+            mouseAngle += TWO_PI; // to ensure the mouseAngle is only a positive value
         }
 
         for (var i = 0; i < data.length; i++) {
@@ -81,20 +82,28 @@ function DoughnutChart(x, y, diameter) {
         ellipse(this.x, this.y,
             this.diameter * 0.45, this.diameter * 0.45);
 
+        push();
+        fill(0);
+        noStroke();
+        textStyle(ITALIC);
+        textSize(40);
+        text("Value: ", this.x, this.y - 30);
+
         let startAngle = 0
 
         for (var j = 0; j < data.length; j++) {
-            let stopAngle = data[j] * TWO_PI;
-            if (mouseDist > this.diameter * 0.225 &&
-                mouseDist < this.diameter * 0.5) { // check if mouse hovering over doughnut
+            let stopAngle = data[j] * TWO_PI; // convert percent value to radians
+            if (mouseDist > this.diameter * 0.225 && // check if mouse hovering over doughnut, more than inner ring
+                mouseDist < this.diameter * 0.5) { // check if mouse hovering over doughnut, less that outer ring
 
                 if (mouseAngle > startAngle && mouseAngle < startAngle + stopAngle) {
-                    // check if mouse is hovering over current doughnut slice
+                    // check if mouse is hovering over current doughnut slice; mouseAngle in radians
+                    // versus the doughnut slices in radians
                     push();
                     fill(colours[j]);
                     noStroke();
                     textSize(40)
-                    text(int(data[j] * 100) + "%", this.x, this.y);
+                    text(int(data[j] * 100) + "%", this.x, this.y + 20);
                     pop();
                 }
             }
