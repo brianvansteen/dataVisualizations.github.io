@@ -2,6 +2,7 @@ function Beverages() {
 
     // Name for the visualisation to appear in the menu bar.
     this.name = 'Beverage Consumption';
+    this.subname = 'One-day survey';
 
     // Each visualisation must have a unique ID with no special
     // characters.
@@ -194,7 +195,7 @@ function Beverages() {
         }
 
         this.setData = function(i) {
-            this.target_size = map(this.data[i], 0, maxAmt, 80, 500); // final size of ellipse
+            this.target_size = map(this.data[i], 0, maxAmt, 80, 400); // final size of ellipse
         }
     }
 }

@@ -1,7 +1,8 @@
 function UKFoodNutrients() {
 
     // Name for the visualisation to appear in the menu bar.
-    this.name = 'UK Nutrients Consumption';
+    this.name = 'UK Nutrients';
+    this.subname = '(Annual Consumption)';
 
     // Each visualisation must have a unique ID with no special characters.
     this.id = 'uk-food-nutrients';
@@ -121,8 +122,8 @@ function UKFoodNutrients() {
             this.yAxisLabel,
             this.layout);
 
-        drawSliderTitle1("Minimum Percentage (y axis)", this.layout);
-        drawSliderTitle2("Minimum Percentage (y axis)", this.layout);
+        drawSliderTitle1("Increase minimum percentage (y axis)", this.layout);
+        drawSliderTitle2("Decrease maximum percentage (y axis)", this.layout);
 
         // Plot all pay gaps between startYear and endYear using the width of the canvas minus margins.
         var numYears = this.endYear - this.startYear;

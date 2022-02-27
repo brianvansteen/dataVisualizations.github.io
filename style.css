@@ -3,11 +3,34 @@ body {
 }
 
 .menu-item {
-    width: 250px;
-    height: 50px;
-    border: 1px solid gray;
+    width: 220px;
+    height: 20px;
+    border-top: 2px solid navy;
+    border-left: 2px solid navy;
+    border-right: 2px solid navy;
+    text-indent: 2px;
+    color: navy;
+    font-size: 18px;
+    font-weight: bold;
     list-style-type: none;
-    padding: 5px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+.submenu-item {
+    width: 220px;
+    height: 20px;
+    border-left: 2px solid navy;
+    border-right: 2px solid navy;
+    border-bottom: 2px solid navy;
+    font-size: 14px;
+    text-indent: 8px;
+    font-style: italic;
+    color: navy;
+    list-style-type: none;
+    padding-top: 2px;
+    padding-bottom: 5px;
+    margin-bottom: 4px;
 }
 
 .container {
@@ -15,9 +38,10 @@ body {
 }
 
 .hover {
-    background: lightgreen
+    background: lightskyblue
 }
 
 .selected {
-    background: gold
+    background: navy;
+    color: white
 }

@@ -1,7 +1,8 @@
 function Bollinger() {
 
     // name for the visualisation to appear in the menu bar.
-    this.name = 'Tesla stock price';
+    this.name = 'Tesla Price';
+    this.subname = 'Bollinger bands';
 
     // each visualisation must have a unique ID with no special characters.
     this.id = 'TSLA-stock-price';
@@ -13,7 +14,7 @@ function Bollinger() {
     this.xAxisLabel = 'Number of Trading Days';
     this.yAxisLabel = 'U.S. dollars ($)';
 
-    var marginSize = 50;
+    let marginSize = 50;
 
     // layout object to store all common plot layout parameters and methods.
     this.layout = {
@@ -48,7 +49,7 @@ function Bollinger() {
 
     // Preload the data. This function is called automatically by the gallery when a visualisation is added.
     this.preload = function() {
-        var self = this;
+        let self = this;
         this.data = loadTable(
             './data/bollinger/TSLA.csv', 'csv', 'header',
             // Callback function to set the value this.loaded to true.
@@ -58,16 +59,16 @@ function Bollinger() {
     }; // end preload
 
     this.setup = function() {
-        // Font defaults.
-        textSize(14);
+        // // Font defaults.
+        // textSize(14);
 
         // set min and max dates
         this.startDate = this.data.getNum(0, 'days');
         this.endDate = this.data.getNum(this.data.getRowCount() - 1, 'days');
 
-        this.startDay = this.data.getString(0, 'date2'); // Excel date for sub-Xlabel
+        this.startDay = this.data.getString(0, 'date2'); // Excel date for sub-Xlabel starting series date
         this.midDay = this.data.getString(Math.floor(this.data.getRowCount() / 2), 'date2'); // Excel date for sub-Xlabel
-        this.endDay = this.data.getString(this.data.getRowCount() - 1, 'date2'); // Excel date for sub-Xlabel
+        this.endDay = this.data.getString(this.data.getRowCount() - 1, 'date2'); // Excel date for sub-Xlabel ending series date
 
         // find min and max stock price for mapping to canvas height.
         this.minPrice = 0; // zero stock price
@@ -77,7 +78,7 @@ function Bollinger() {
         this.frameCount = 0;
 
         this.allPricing = [];
-        for (var i = 0; i < this.data.getRowCount(); i++) {
+        for (let i = 0; i < this.data.getRowCount(); i++) {
             this.allPricing.push(this.data.getNum(i, 'close'));
         }
 
@@ -93,7 +94,7 @@ function Bollinger() {
         }
 
         this.select2 = createSelect(); // create dropdown menu in DOM
-        this.select2.position(this.layout.rightMargin * 1.25, height - 65); // place dropdown at x, y on canvas
+        this.select2.position(this.layout.rightMargin * 1.22, height - 65); // place dropdown at x, y on canvas
         this.select2.style('font-size', '12px');
         this.select2.style('color', 'blueviolet');
         this.select2.style('background-color', 'lavender');
@@ -104,7 +105,7 @@ function Bollinger() {
         }
 
         this.select3 = createSelect(); // create dropdown menu in DOM
-        this.select3.position(this.layout.rightMargin * 1.25, height - 30); // place dropdown at x, y on canvas
+        this.select3.position(this.layout.rightMargin * 1.22, height - 30); // place dropdown at x, y on canvas
         this.select3.style('font-size', '18px');
         this.select3.style('color', 'blueviolet');
         this.select3.style('background-color', 'lavender');
@@ -143,30 +144,27 @@ function Bollinger() {
             this.yAxisLabel,
             this.layout);
 
-        drawAxisSubLabels(this.startDay, this.midDay, this.endDay, this.layout); // draw x and y axis labels; helper function
+        drawXAxisSubLabels(this.startDay, this.midDay, this.endDay, this.layout); // draw x and y axis labels; helper function
 
-        drawDropDownTitle("Simple Moving Average (days)", this.layout);
-        drawDropDownTitle2("(Default Simple Moving Average, days)", this.layout);
-        drawDropDownTitle3("Bollinger bands (standard deviations)", this.layout);
+        drawDropDownTitle("Simple Moving Average (days)", this.layout); // left drop down
+        drawDropDownTitle2("(Default Simple Moving Average, days)", this.layout); // right secondary drop down
+        drawDropDownTitle3("Bollinger bands (standard deviations)", this.layout); // right drop down
 
         // Plot all stock prices between startDate and endDate using the width of the canvas minus margins.
-        let smaPrevious;
-        let sdUpPrevious;
-        //let sdDownPrevious
-        let previous;
+        let smaPrevious; // simple moving average
+        let sdPrevious; // standard deviation
+        let previous; // daily price
         let numDays = this.endDate - this.startDate;
         let sma = int(this.select1.value()); // from SMA dropdown menu
-        this.smaPricing = this.simpleMovingAverage(this.allPricing, sma);
-        //let sd = int(this.select3.value()); // from standard deviation dropdown menu
-        this.sdPricing = this.smaSD(this.allPricing, sma);
+        this.smaPricing = this.simpleMovingAverage(this.allPricing, sma); // dimplr moving average value
+        this.sdPricing = this.smaSD(this.allPricing, sma); // standard deviation value of simple moving average
         this.sdSlice = this.sdPricing.slice(800, 1100);
-        //console.log(this.sdSlice);
 
         // Count the number of days plotted each frame to create animation effect.
         let dayCount = 0;
 
         // Loop over all rows and draw a line from the previous value to the current.
-        for (var i = 0; i < this.data.getRowCount(); i++) {
+        for (let i = 0; i < this.data.getRowCount(); i++) {
 
             // Create an object to store daily for the current day
             let current = {
@@ -189,24 +187,24 @@ function Bollinger() {
             previous = current;
         }
 
-        for (var i = 0; i < this.data.getRowCount() - sma; i++) {
+        for (let i = 0; i < this.data.getRowCount() - sma; i++) {
 
             let sma = int(this.select1.value()); // from SMA dropdown menu
             let sd = int(this.select3.value()); // drom standard deviation dropdown menu
 
-            let smaCurrent = {
+            let smaCurrent = { // simple moving average values
                 // Convert strings to numbers.
                 'day': this.data.getNum(i + sma, 'days'),
                 'price': this.smaPricing[i],
             };
 
-            let sdCurrent = {
+            let sdCurrent = { // standard deviation values
                 // Convert strings to numbers.
                 'sdPrice': this.sdPricing[i],
             };
 
             if (smaPrevious != null) {
-                // Draw line segment connecting previous day to current day stock price.
+                // draw line segment connecting previous day to current day simple moving average value
                 push();
                 stroke(139, 0, 139);
                 strokeWeight(4);
@@ -216,54 +214,55 @@ function Bollinger() {
                     this.mapPriceToHeight(smaCurrent.price));
                 pop();
 
-                // Draw line segment connecting previous year to current year stock price.
+                // draw line segment connecting previous day to current day SMA plus standard deviation
                 push();
                 stroke(34, 139, 34);
                 strokeWeight(2);
                 //setLineDash([10, 10]);
                 line(this.mapDayToWidth(smaPrevious.day),
-                    this.mapPriceToHeight(smaPrevious.price + (sdUpPrevious.sdPrice * sd)),
+                    this.mapPriceToHeight(smaPrevious.price + (sdPrevious.sdPrice * sd)),
                     this.mapDayToWidth(smaCurrent.day),
                     this.mapPriceToHeight(smaCurrent.price + (sdCurrent.sdPrice * sd)));
                 pop();
 
+                // draw line segment connecting previous day to current day SMA minus standard deviation
                 push();
                 stroke(178, 34, 34);
                 strokeWeight(2);
                 //setLineDash([10, 10]);
                 line(this.mapDayToWidth(smaPrevious.day),
-                    this.mapPriceToHeight(smaPrevious.price - (sdUpPrevious.sdPrice * sd)),
+                    this.mapPriceToHeight(smaPrevious.price - (sdPrevious.sdPrice * sd)),
                     this.mapDayToWidth(smaCurrent.day),
                     this.mapPriceToHeight(smaCurrent.price - (sdCurrent.sdPrice * sd)));
                 pop();
 
-                // The number of x-axis labels to skip so that only numXTickLabels are drawn.
+                // number of x-axis labels to skip so that only numXTickLabels are drawn.
                 let xLabelSkip = ceil(numDays / this.layout.numXTickLabels);
 
-                // Draw the tick label marking the start of the previous year.
+                // draw the tick label marking the start of the previous year.
                 if (dayCount % xLabelSkip == 0) {
                     drawXAxisTickLabel(smaPrevious.day, this.layout,
                         this.mapDayToWidth.bind(this));
                 }
 
-                // When six or fewer years are displayed also draw the final year x tick label.
+                // when six or fewer years are displayed also draw the final year x tick label.
                 if ((numDays <= 6 &&
-                        dayCount == numDays - 1)) {
+                        dayCount === numDays - 1)) {
                     drawXAxisTickLabel(smaCurrent.day, this.layout,
                         this.mapDayToWidth.bind(this));
                 }
                 dayCount++;
-            } // if iteration
+            }; // if iteration
 
             // Stop drawing this frame when the number of days drawn is equal to the frame count
             if (dayCount >= this.frameCount) {
                 break;
-            }
+            };
 
             // Assign current day to previous day so that it is available during the next iteration
             // of this loop to give us the start position of the next line segment.
-            smaPrevious = smaCurrent;
-            sdUpPrevious = sdCurrent;
+            smaPrevious = smaCurrent; // simple moving average values
+            sdPrevious = sdCurrent; // standard deviation values
         }; // for loop, rows
 
         // Count the number of frames since this visualisation started; used in creating the
@@ -278,12 +277,12 @@ function Bollinger() {
             return result;
         }
         let sum = 0;
-        for (var i = 0; i < window; i++) { // build initial array of length 'window'
+        for (let i = 0; i < window; i++) { // build initial array of length 'window'
             sum += data[i];
         }
         result.push(sum / window);
         let steps = data.length - window - 1; // array length less size of window
-        for (var i = 0; i < steps; i++) {
+        for (let i = 0; i < steps; i++) {
             sum -= data[i]; // remove one data point
             sum += data[i + window]; // add one data point
             result.push(sum / window); // push changes to array
@@ -297,7 +296,7 @@ function Bollinger() {
         if (data.lenth < window) {
             return resultSD;
         }
-        for (var i = 0; i < window; i++) {
+        for (let i = 0; i < window; i++) {
             smaWindow.push(data[i]);
         }
         let mean = smaWindow.reduce((smaWindow, curr) => { return smaWindow + curr }, 0) / window; // create average
@@ -305,7 +304,7 @@ function Bollinger() {
         let sum = smaSquare.reduce((smaWindow, curr) => smaWindow + curr, 0); // sum the updated array
         resultSD.push(Math.sqrt(sum / window)); // build initial array of length 'window'
         let steps = data.length - window - 1; // array length of size of window
-        for (var i = 0; i < steps; i++) {
+        for (let i = 0; i < steps; i++) {
             smaWindow.shift(); // remove one data point
             smaWindow.push(data[i + window]); // add one data point
             let mean = smaWindow.reduce((smaWindow, curr) => { return smaWindow + curr }, 0) / window; // create average
@@ -315,7 +314,6 @@ function Bollinger() {
         }
         return resultSD;
     }
-
 
     this.drawTitle = function() {
         push();

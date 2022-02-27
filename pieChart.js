@@ -6,8 +6,8 @@ function PieChart(x, y, diameter) {
     this.labelSpace = 40;
 
     this.get_radians = function(data) { // called from draw below
-        var total = sum(data);
-        var radians = [];
+        let total = sum(data);
+        let radians = [];
         for (let i = 0; i < data.length; i++) {
             radians.push((data[i] / total) * TAU); // convert result to radians
         }
@@ -15,7 +15,6 @@ function PieChart(x, y, diameter) {
     };
 
     this.draw = function(data, labels, colours, title) {
-
         // Test that data is not empty and that each input array is the same length.
         if (data.length == 0) {
             alert('Data has length zero!');
@@ -29,13 +28,13 @@ function PieChart(x, y, diameter) {
         }
 
         push();
-        angleMode(RADIANS);
+        angleMode(RADIANS); // set calculations to radians
 
-        var angles = this.get_radians(data); // call function above to get radians
-        var lastAngle = 0; // start at 0
-        var colour;
+        let angles = this.get_radians(data); // call function above to get radians
+        let lastAngle = 0; // start at 0
+        let colour;
 
-        for (var i = 0; i < data.length; i++) {
+        for (let i = 0; i < data.length; i++) {
             if (colours) {
                 colour = colours[i]; // colour assigned from colours from education values
             } else {
@@ -46,7 +45,7 @@ function PieChart(x, y, diameter) {
             stroke(50); // circumfrance line
             strokeWeight(4); // circumfrance line
 
-            arc(this.x, this.y,
+            arc(this.x, this.y, // calculated in radians
                 this.diameter, this.diameter, // width, height
                 lastAngle, lastAngle + angles[i] + 0.001); // start, stop (hack for 0!)
             pop();
@@ -69,10 +68,10 @@ function PieChart(x, y, diameter) {
     }; // end draw
 
     this.makeLegendItem = function(label, i, colour) {
-        var x = this.x + 100 + this.diameter / 2;
-        var y = this.y + (this.labelSpace * i) - this.diameter / 4;
-        var boxWidth = this.labelSpace / 2;
-        var boxHeight = this.labelSpace / 2;
+        let x = this.x + 100 + this.diameter / 2;
+        let y = this.y + (this.labelSpace * i) - this.diameter / 4;
+        let boxWidth = this.labelSpace / 2;
+        let boxHeight = this.labelSpace / 2;
 
         fill(colour);
         rect(x, y, boxWidth, boxHeight);
@@ -83,6 +82,6 @@ function PieChart(x, y, diameter) {
         textSize(18);
         textWrap(WORD);
         text(label, x + boxWidth + 10, y + boxWidth / 2);
-    }; // end legend items
+    }; // end makeLegendItem
 
 } // end PieChart

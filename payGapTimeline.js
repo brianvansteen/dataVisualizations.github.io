@@ -14,15 +14,14 @@ function PayGapTimeSeries() {
     this.xAxisLabel = 'Year';
     this.yAxisLabel = 'Pay Gap Percentage';
 
-    var marginSize = 50;
+    let marginSize = 50;
 
     // Layout object to store all common plot layout parameters and
     // methods.
     this.layout = {
         marginSize: marginSize,
 
-        // Locations of margin positions. Left and bottom have double margin
-        // size due to axis and tick labels.
+        // margin positions; left and bottom have double margin size due to axis and tick labels.
         leftMargin: marginSize * 2,
         rightMargin: width - marginSize,
         topMargin: marginSize,
@@ -52,7 +51,7 @@ function PayGapTimeSeries() {
     // Preload the data. This function is called automatically by the
     // gallery when a visualisation is added.
     this.preload = function() {
-        var self = this;
+        let self = this;
         this.data = loadTable(
             './data/payGap/all-employees-hourly-pay-by-gender-1997-2017.csv', 'csv', 'header',
             // Callback function to set the value
@@ -73,6 +72,9 @@ function PayGapTimeSeries() {
         // Find min and max pay gap for mapping to canvas height.
         this.minPayGap = min(this.data.getColumn('pay_gap')) * 0.98; // Pay equality (zero pay gap).
         this.maxPayGap = max(this.data.getColumn('pay_gap')) * 1.02;
+
+        // count the number of frames drawn since the visualisation started to animate the plot
+        this.frameCount = 0;
     };
 
     this.destroy = function() {};
@@ -93,7 +95,7 @@ function PayGapTimeSeries() {
             this.mapPayGapToHeight.bind(this),
             0);
 
-        // Draw x and y axis.
+        // Draw y axis only
         drawAxis(this.layout);
 
         // Draw x and y axis labels.
@@ -101,27 +103,39 @@ function PayGapTimeSeries() {
             this.yAxisLabel,
             this.layout);
 
-        // Plot all pay gaps between startYear and endYear using the width
-        // of the canvas minus margins.
-        var previous;
-        var numYears = this.endYear - this.startYear;
+        // Plot all pay gaps between startYear and endYear using the width of the canvas minus margins.
+        let previous;
+        let numYears = this.endYear - this.startYear;
+
+        // Count the number of days plotted each frame to create animation effect.
+        let yearCount = 0;
 
         // Loop over all rows and draw a line from the previous value to the current.
-        for (var i = 0; i < this.data.getRowCount(); i++) {
+        for (let i = 0; i < this.data.getRowCount(); i++) {
 
             // Create an object to store data for the current year.
-            var current = {
+            let current = {
                 // Convert strings to numbers.
                 'year': this.data.getNum(i, 'year'),
                 'percentage': this.data.getNum(i, 'pay_gap')
             };
+
+            push();
+            stroke(100);
+            strokeWeight(2);
+            setLineDash([4, 10]);
+            line(this.mapYearToWidth(current.year), // draw vertical lines for each year
+                this.layout.bottomMargin,
+                this.mapYearToWidth(current.year),
+                this.mapPayGapToHeight(current.percentage));
+            pop();
 
             if (previous != null) {
                 // Draw line segment connecting previous year to current year pay gap.
                 push();
                 stroke(139, 0, 139);
                 strokeWeight(3);
-                setLineDash([10, 10]);
+                setLineDash([15, 10]);
                 line(this.mapYearToWidth(previous.year),
                     this.mapPayGapToHeight(previous.percentage),
                     this.mapYearToWidth(current.year),
@@ -129,25 +143,37 @@ function PayGapTimeSeries() {
                 pop();
 
                 // The number of x-axis labels to skip so that only numXTickLabels are drawn.
-                var xLabelSkip = ceil(numYears / this.layout.numXTickLabels);
+                let xLabelSkip = ceil(numYears / this.layout.numXTickLabels);
 
                 // Draw the tick label marking the start of the previous year.
                 if (i % xLabelSkip == 0) {
-                    drawXAxisTickLabel(previous.year, this.layout,
-                        this.mapYearToWidth.bind(this));
+                    drawXAxisTickYears(previous.year, this.layout,
+                        this.mapYearToWidth.bind(this)); // draw the years, not the X tick lines
                 }
-            }
+
+                yearCount++;
+            }; // if iteration
+
+            // Stop drawing this frame when the number of years drawn is equal to the frame count
+            if (yearCount >= this.frameCount) {
+                break;
+            };
             // Assign current year to previous year so that it is available during the next iteration of 
             // this loop to give us the start position of the next line segment.
             previous = current;
-        }
-    };
+        }; // end for loop
+
+        // Count the number of frames since this visualisation started; used in creating the
+        // animation effect and to stop the main p5 draw loop when all days have been drawn.
+        this.frameCount++;
+
+    }; // end draw
 
     this.drawTitle = function() {
         fill(0);
         noStroke();
         textAlign('center', 'center');
-
+        textSize(28);
         text(this.title,
             (this.layout.plotWidth() / 2) + this.layout.leftMargin,
             this.layout.topMargin - (this.layout.marginSize / 2));

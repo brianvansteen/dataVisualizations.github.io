@@ -1,7 +1,8 @@
 function EducationLabels() {
 
     // Name for the visualisation to appear in the menu bar.
-    this.name = 'Education in Canada Highlights';
+    this.name = 'Canadian Education:';
+    this.subname = '(Highlightable)';
 
     // Each visualisation must have a unique ID with no specia characters.
     this.id = 'education-labels';
@@ -9,9 +10,9 @@ function EducationLabels() {
     // Property to represent whether data has been loaded.
     this.loaded = false;
 
-    // Preload the data. This function is called automatically by the gallery when a visualisation is added.
+    // preload the data, called automatically by the gallery when a visualisation is added
     this.preload = function() {
-        var self = this;
+        let self = this;
         this.data = loadTable(
             './data/education/Canada.csv', 'csv', 'header',
             // Callback function to set the value this.loaded to true.
@@ -33,7 +34,7 @@ function EducationLabels() {
         this.select.style('background-color', 'lavender');
         this.select.style('text-align', 'center');
         // fill the dropdown options with all geography values
-        var geographies = this.data.columns; // one geography per column
+        let geographies = this.data.columns; // one geography per column
         for (let i = 1; i < geographies.length; i++) { // index 0 is education levels
             this.select.option(geographies[i]); // each dropdown value
         }
@@ -53,22 +54,22 @@ function EducationLabels() {
         }
 
         // Get the value of the geography we're interested in from the select item.
-        var geography = this.select.value(); // from dropdown menu
+        let geography = this.select.value(); // from dropdown menu
 
         // Get the column of raw data for geography.
-        var col = this.data.getColumn(geography); // data from loadTable
+        let col = this.data.getColumn(geography); // data from loadTable
 
         // Convert all data strings to numbers.
         col = stringsToNumbers(col);
 
         // Copy the row labels from the table (the first item of each row).
-        var labels = this.data.getColumn(0); // from loadTable; column 0
+        let labels = this.data.getColumn(0); // from loadTable; column 0
 
         // Colour to use for each category.
-        var colours = ['#000080', '#800000', '#006400', '#FF1493', '#8B008B', '#FF8C00'];
+        let colours = ['#000080', '#800000', '#006400', '#FF1493', '#8B008B', '#FF8C00'];
 
         // Make a title.
-        var title = 'Level of education for: ' + geography;
+        let title = 'Level of education for: ' + geography;
 
         // Draw the pie chart based on data from above
         this.pie.draw(col, labels, colours, title);

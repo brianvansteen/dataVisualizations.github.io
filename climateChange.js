@@ -11,9 +11,9 @@ function ClimateChange() {
 
     // Names for each axis.
     this.xAxisLabel = 'Year';
-    this.yAxisLabel = 'Degrees centigrade delta';
+    this.yAxisLabel = 'Degrees centigrade delta from mean';
 
-    var marginSize = 50;
+    let marginSize = 50;
 
     // layout object to store all common plot layout parameters and methods
     this.layout = {
@@ -46,9 +46,9 @@ function ClimateChange() {
     // Property to represent whether data has been loaded.
     this.loaded = false;
 
-    // preload the data; called automatically by the gallery when a visualisation is added
+    // preload the data, called automatically by the gallery when a visualisation is added
     this.preload = function() {
-        var self = this;
+        let self = this;
         this.data = loadTable(
             './data/surfaceTemperature/surface-temperature.csv', 'csv', 'header',
             // Callback function to set the value this.loaded to true.
@@ -76,6 +76,17 @@ function ClimateChange() {
         // count the number of frames drawn since the visualisation started to animate the plot
         this.frameCount = 0;
 
+        this.select = createSelect(); // create dropdown menu in DOM
+        this.select.position(this.layout.leftMargin * 6, height - 30); // place dropdown at x, y on canvas
+        this.select.style('font-size', '18px');
+        this.select.style('color', 'blueviolet');
+        this.select.style('background-color', 'lavender');
+        this.select.style('text-align', 'center');
+        let backgroundValue = ["No", "Yes"] // values for the dropdown menu
+        for (let i = 0; i < backgroundValue.length; i++) {
+            this.select.option(backgroundValue[i]); // each dropdown value
+        }
+
         // Create sliders to control start and end years; default to visualise full range
         this.startSlider = createSlider(this.minYear,
             this.maxYear - 1,
@@ -93,6 +104,7 @@ function ClimateChange() {
     this.destroy = function() {
         this.startSlider.remove();
         this.endSlider.remove();
+        this.select.remove();
     };
 
     this.draw = function() {
@@ -118,8 +130,10 @@ function ClimateChange() {
             this.yAxisLabel,
             this.layout);
 
-        drawSliderTitle1("Starting Year (x axis)", this.layout);
-        drawSliderTitle2("Ending Year (x axis)", this.layout);
+        drawSliderTitle1("Adjust sarting year (x axis)", this.layout);
+        drawSliderTitle2("Adjust ending year (x axis)", this.layout);
+
+        drawDropDownTitle("Temperature Background", this.layout);
 
         // Prevent slider ranges overlapping.
         if (this.startSlider.value() >= this.endSlider.value()) {
@@ -139,18 +153,19 @@ function ClimateChange() {
         pop();
 
         // Plot all temperatures between startYear and endYear using the width of the canvas minus margins.
-        var previous;
-        var numYears = this.endYear - this.startYear;
-        var segmentWidth = this.layout.plotWidth() / numYears;
+        let previous;
+        let numYears = this.endYear - this.startYear;
+        let segmentWidth = this.layout.plotWidth() / numYears;
 
         // Count the number of years plotted each frame to create animation effect.
-        var yearCount = 0;
+        let yearCount = 0;
+        let background = this.select.value(); // for displaying background visualization or not
 
         // Loop over all rows but only plot those in range.
-        for (var i = 0; i < this.data.getRowCount(); i++) {
+        for (let i = 0; i < this.data.getRowCount(); i++) {
 
-            //     // Create an object to store data for the current year.
-            var current = {
+            // Create an object to store data for the current year.
+            let current = {
                 // Convert strings to numbers.
                 'year': this.data.getNum(i, 'year'),
                 'temperature': this.data.getNum(i, 'temperature')
@@ -161,22 +176,25 @@ function ClimateChange() {
                 current.year <= this.endYear) {
 
                 // Draw background gradient to represent colour temperature of the current year.
-                noStroke();
-                fill(this.mapTemperatureToColour(current.temperature));
-                rect(this.mapYearToWidth(previous.year),
-                    this.layout.topMargin,
-                    segmentWidth,
-                    this.layout.plotHeight());
+                if (background === "Yes") {
+                    noStroke();
+                    fill(this.mapTemperatureToColour(current.temperature));
+                    rect(this.mapYearToWidth(previous.year),
+                        this.layout.topMargin,
+                        segmentWidth,
+                        this.layout.plotHeight());
+                }
 
                 // Draw line segment connecting previous year to current year temperature.
-                stroke(0);
+                stroke(100, 0, 0);
+                strokeWeight(2);
                 line(this.mapYearToWidth(previous.year),
                     this.mapTemperatureToHeight(previous.temperature),
                     this.mapYearToWidth(current.year),
                     this.mapTemperatureToHeight(current.temperature));
 
                 // The number of x-axis labels to skip so that only numXTickLabels are drawn.
-                var xLabelSkip = ceil(numYears / this.layout.numXTickLabels);
+                let xLabelSkip = ceil(numYears / this.layout.numXTickLabels);
 
                 // Draw the tick label marking the start of the previous year.
                 if (yearCount % xLabelSkip == 0) {
@@ -245,12 +263,12 @@ function ClimateChange() {
     };
 
     this.mapTemperatureToColour = function(value) {
-        var red = map(value,
+        let red = map(value,
             this.minTemperature,
             this.maxTemperature,
             0,
             255);
-        var blue = 255 - red;
+        let blue = 255 - red;
         return color(red, 0, blue, 100);
     };
 }

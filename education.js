@@ -1,7 +1,7 @@
 function Education() {
 
     // Name for the visualisation to appear in the menu bar.
-    this.name = 'Education in Canada';
+    this.name = 'Canadian Education';
 
     // Each visualisation must have a unique ID with no specia characters.
     this.id = 'level-of-education';
@@ -9,7 +9,7 @@ function Education() {
     // Property to represent whether data has been loaded.
     this.loaded = false;
 
-    // Preload the data. This function is called automatically by the gallery when a visualisation is added.
+    // preload the data, called automatically by the gallery when a visualisation is added
     this.preload = function() {
         var self = this;
         this.data = loadTable(

@@ -6,8 +6,8 @@ function DoughnutChart(x, y, diameter) {
     this.labelSpace = 40;
 
     this.get_radians = function(data) { // called from draw below
-        var total = sum(data);
-        var radians = [];
+        let total = sum(data);
+        let radians = [];
         for (let i = 0; i < data.length; i++) {
             // radians.push((data[i] / total) * TWO_PI); // convert result to radians
             radians.push((data[i] / total) * TAU); // convert result to radians
@@ -31,10 +31,10 @@ function DoughnutChart(x, y, diameter) {
 
         push();
         angleMode(RADIANS);
-        var angles = this.get_radians(data); // call function above to get radians
-        var total = sum(data);
-        var angleStart = 0; // start at 0
-        var colour;
+        let angles = this.get_radians(data); // call function above to get radians
+        let total = sum(data);
+        let angleStart = 0; // start at 0
+        let colour;
 
         let mouseDist = dist(this.x, this.y, mouseX, mouseY); // distance from center of doughnut
         let mouseAngle = createVector(100, 0).angleBetween(createVector(mouseX - this.x, mouseY - this.y));
@@ -43,7 +43,7 @@ function DoughnutChart(x, y, diameter) {
             mouseAngle += TWO_PI; // to ensure the mouseAngle is only a positive value
         }
 
-        for (var i = 0; i < data.length; i++) {
+        for (let i = 0; i < data.length; i++) {
             if (colours) {
                 colour = colours[i];
             } else {
@@ -76,11 +76,13 @@ function DoughnutChart(x, y, diameter) {
         }
 
         // knock a hole out of the middle
+        push();
         fill(250, 250, 210);
         stroke(50);
         strokeWeight(4);
         ellipse(this.x, this.y,
             this.diameter * 0.45, this.diameter * 0.45);
+        pop();
 
         push();
         fill(0);
@@ -91,7 +93,7 @@ function DoughnutChart(x, y, diameter) {
 
         let startAngle = 0
 
-        for (var j = 0; j < data.length; j++) {
+        for (let j = 0; j < data.length; j++) {
             let stopAngle = data[j] * TWO_PI; // convert percent value to radians
             if (mouseDist > this.diameter * 0.225 && // check if mouse hovering over doughnut, more than inner ring
                 mouseDist < this.diameter * 0.5) { // check if mouse hovering over doughnut, less that outer ring
@@ -114,10 +116,10 @@ function DoughnutChart(x, y, diameter) {
     }; // end draw
 
     this.makeLegendItem = function(label, i, colour) {
-        var x = this.x + 80 + this.diameter / 2;
-        var y = this.y + (this.labelSpace * i) - this.diameter / 4;
-        var boxWidth = this.labelSpace / 2;
-        var boxHeight = this.labelSpace / 2;
+        let x = this.x + 80 + this.diameter / 2;
+        let y = this.y + (this.labelSpace * i) - this.diameter / 4;
+        let boxWidth = this.labelSpace / 2;
+        let boxHeight = this.labelSpace / 2;
 
         noStroke();
         fill(colour);

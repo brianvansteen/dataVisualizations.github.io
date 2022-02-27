@@ -2,6 +2,7 @@ function UKFoodOpinions() {
 
     // Name for the visualisation to appear in the menu bar.
     this.name = 'UK Food Opinions';
+    this.subname = 'Doughnut chart with values';
 
     // Each visualisation must have a unique ID with no specia characters.
     this.id = 'uk-food';
