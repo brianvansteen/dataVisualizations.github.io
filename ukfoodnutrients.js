@@ -163,7 +163,8 @@ function UKFoodNutrients() {
                     noStroke();
                     fill(this.colours[i]);
                     push();
-                    textSize(20);
+                    textStyle(BOLD);
+                    textSize(16);
                     text(label, (150 + 65 * i), this.mapPercentToHeight(current.percentage));
                     pop();
                 }

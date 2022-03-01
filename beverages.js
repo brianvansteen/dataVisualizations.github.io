@@ -175,14 +175,33 @@ function Beverages() {
             this.direction.normalize(); // make a unit vector
             this.direction.mult(10); // multiple direction vectors by 4
             // this.pos.add(this.direction); // position add the result of the direction multiple
-            if (this.pos.x > -500 && this.pos.y < -200) {
-                this.pos.add(-70, 70, 0);
-            } else if (this.pos.x < 500 && this.pos.y < -200) {
-                this.pos.add(70, 70, 0);
-            } else if (this.pos.x > -500 && this.pos.y > 250) {
-                this.pos.sub(-70, 70, 0);
-            } else if (this.pos.x < 500 && this.pos.y > 250) {
-                this.pos.sub(70, 70, 0)
+
+            // keep away from top of graph
+            if (this.pos.x > -500 && this.pos.y < -200) { // while > -500 x, and if < -200 y; move left and down
+                this.pos.add(-70, 70, 0); // ADD x, y, z values to add to vector position > move left and down
+
+            } else if (this.pos.x < -500 && this.pos.y < -200) { // if < -500 x, and if < -200 y; move right and down
+                this.pos.add(70, 70, 0); // ADD x, y, z values to add to vector position > move right and down
+
+            } else if (this.pos.x < 500 && this.pos.y < -200) { // while < 500 x, and if < -200 y; move right and down
+                this.pos.add(70, 70, 0); // ADD x, y, z values to add to vector position > move right and down
+
+            } else if (this.pos.x > 500 && this.pos.y < -200) { // if > 500 x, and if < -200 y; move left and down
+                this.pos.add(-70, 70, 0); // ADD x, y, z values to add to vector position > move right and down
+
+                // keep away from bottom of graph
+            } else if (this.pos.x > -500 && this.pos.y > 200) { // while > -500 x, and if > 200 y; move left and up
+                this.pos.sub(70, 70, 0); // SUB x, y, z values to add to vector position > move left and up
+
+            } else if (this.pos.x < -500 && this.pos.y > 200) { // if < -500 x, and if > 200 y; move right and up
+                this.pos.sub(-70, 70, 0); // SUB x, y, z values to add to vector position > move right and up
+
+            } else if (this.pos.x < 500 && this.pos.y > 200) { // while < 500 x, and if > 200 y; move right and up
+                this.pos.sub(-70, 70, 0) // SUB x, y, z values to add to vector position > move right and up
+
+            } else if (this.pos.x > 500 && this.pos.y > 200) { // if < 500 x, and if > 200 y; move left and up
+                this.pos.sub(70, 70, 0) // SUB x, y, z values to add to vector position > move left and up 
+
             } else {
                 this.pos.add(this.direction);
             }
@@ -195,7 +214,7 @@ function Beverages() {
         }
 
         this.setData = function(i) {
-            this.target_size = map(this.data[i], 0, maxAmt, 80, 400); // final size of ellipse
+            this.target_size = map(this.data[i], 0, maxAmt, 80, 360); // final size of ellipse
         }
     }
 }

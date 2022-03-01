@@ -93,13 +93,13 @@ function Bollinger() {
             this.select1.option(smaValue1[i]); // each dropdown value
         }
 
-        this.select2 = createSelect(); // create dropdown menu in DOM
+        this.select2 = createSelect(); // create sub-dropdown menu in DOM
         this.select2.position(this.layout.rightMargin * 1.22, height - 65); // place dropdown at x, y on canvas
         this.select2.style('font-size', '12px');
         this.select2.style('color', 'blueviolet');
         this.select2.style('background-color', 'lavender');
         this.select2.style('text-align', 'center');
-        let smaValue2 = [20] // value for the dropdown menu
+        let smaValue2 = [20] // value for the sub-dropdown menu
         for (let i = 0; i < smaValue2.length; i++) {
             this.select2.option(smaValue2[i]); // each dropdown value
         }
@@ -114,6 +114,7 @@ function Bollinger() {
         for (let i = 0; i < sdValue.length; i++) {
             this.select3.option(sdValue[i]); // each dropdown value
         }
+
     }; // end setup
 
 
