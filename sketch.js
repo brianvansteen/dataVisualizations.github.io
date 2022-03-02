@@ -12,17 +12,15 @@ function setup() {
 
     // Add the visualisation objects here.
     gallery.addVisual(new Bollinger()); // Bollinger bands
+    gallery.addVisual(new Beverages()); // NEW regression analysis
+    gallery.addVisual(new HousePricing());
     gallery.addVisual(new Education()); // NEW education pie chart
     gallery.addVisual(new EducationLabels()); // NEW education pie chart
-    // gallery.addVisual(new Regression()); // NEW regression analysis
-    gallery.addVisual(new ClimateChange());
-    gallery.addVisual(new Beverages()); // NEW regression analysis
-    //gallery.addVisual(new HousingKNN()); // new kNN
-    gallery.addVisual(new TechDiversityGender());
-    gallery.addVisual(new HousePricing());
     gallery.addVisual(new PayGapTimeSeries());
     gallery.addVisual(new UKFoodOpinions());
     gallery.addVisual(new UKFoodNutrients());
+    gallery.addVisual(new ClimateChange());
+
     //gallery.addVisual(new Waffle());
 }
 

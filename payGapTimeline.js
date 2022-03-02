@@ -75,7 +75,8 @@ function PayGapTimeSeries() {
 
         // count the number of frames drawn since the visualisation started to animate the plot
         this.frameCount = 0;
-    };
+
+    }; // end setup
 
     this.destroy = function() {};
 
@@ -152,6 +153,7 @@ function PayGapTimeSeries() {
                 }
 
                 yearCount++;
+
             }; // if iteration
 
             // Stop drawing this frame when the number of years drawn is equal to the frame count

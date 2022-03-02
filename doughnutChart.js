@@ -103,9 +103,11 @@ function DoughnutChart(x, y, diameter) {
                     // versus the doughnut slices in radians
                     push();
                     fill(colours[j]);
+                    rect(this.x - 50, this.y - 5, 100, 70)
+                    fill(255);
                     noStroke();
                     textSize(40)
-                    text(int(data[j] * 100) + "%", this.x, this.y + 20);
+                    text(int(data[j] * 100) + "%", this.x, this.y + 30);
                     pop();
                 }
             }
