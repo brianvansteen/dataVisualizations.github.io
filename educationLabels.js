@@ -1,8 +1,8 @@
 function EducationLabels() {
 
-    // Name for the visualisation to appear in the menu bar.
+    // description and sub-description for the visualisation in the menu bar
     this.name = 'Canadian Education:';
-    this.subname = '(Highlightable)';
+    this.subname = '(highlightable pie chart)';
 
     // Each visualisation must have a unique ID with no specia characters.
     this.id = 'education-labels';

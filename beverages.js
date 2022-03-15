@@ -1,11 +1,10 @@
 function Beverages() {
 
-    // Name for the visualisation to appear in the menu bar.
+    // description and sub-description for the visualisation in the menu bar
     this.name = 'Beverage Consumption';
     this.subname = 'One-day survey';
 
-    // Each visualisation must have a unique ID with no special
-    // characters.
+    // Each visualisation must have a unique ID with no special characters.
     this.id = 'beverage-consumption';
 
     this.title = 'Beverage Consumption Amounts';
@@ -40,11 +39,9 @@ function Beverages() {
 
     }; // end layout
 
-
-    this.bubbles = [];
+    this.bubbles = []; // array for bubbles showing data
     let maxAmt;
-    this.times = [];
-    this.dayButtons = [];
+    this.times = []; // array for survey result consumption times
 
     this.preload = function() {
         var self = this;
@@ -86,21 +83,21 @@ function Beverages() {
         this.select1.style('color', 'blueviolet');
         this.select1.style('background-color', 'lavender');
         this.select1.style('text-align', 'center');
-        let times = ['Morning', 'Afternoon', 'Evening', 'Night', 'All']; // values for the dropdown menu
+        let times = ['Morning', 'Afternoon', 'Evening', 'Night', 'Totals']; // values for the dropdown menu
         for (let i = 0; i < times.length; i++) {
             this.select1.option(times[i]); // each dropdown value
         }
 
     }; // end setup
 
-    this.changeYear = function(time) {
+    this.changeTime = function(time) {
         for (var i = 0; i < this.bubbles.length; i++) {
             this.bubbles[i].setData(time);
         }
     };
 
     this.destroy = function() {
-        this.bubbles = [];
+        this.bubbles = []; // remove bubbles
         this.select1.remove(); // remove dropdown menu
     };
 
@@ -113,9 +110,8 @@ function Beverages() {
                 this.bubbles[i].update(this.bubbles); // call this.update first
                 this.bubbles[i].draw(); // call this.draw after update
             }
-            let timeOfDay = ['All', 'Morning', 'Afternoon', 'Evening', 'Night'];
-            this.changeYear(timeOfDay.indexOf(this.select1.value()));
-            //console.log(this.changeYear(timeOfDay.indexOf(this.select1.value())));
+            let timeOfDay = ['Totals', 'Morning', 'Afternoon', 'Evening', 'Night'];
+            this.changeTime(timeOfDay.indexOf(this.select1.value()));
 
         } // end draw
 
@@ -155,66 +151,77 @@ function Beverages() {
         }
 
         this.update = function(_bubbles) {
-            this.direction.set(0, 0);
+                this.direction.set(0, 0);
 
-            for (var i = 0; i < _bubbles.length; i++) {
-                if (_bubbles[i].name != this.name) {
-                    var v = p5.Vector.sub(this.pos, _bubbles[i].pos); // vector subtraction this.pos minus bubble
-                    var d = v.mag(); // calculates length / magnitude of vector from line above
+                for (var i = 0; i < _bubbles.length; i++) {
+                    if (_bubbles[i].name != this.name) {
+                        var v = p5.Vector.sub(this.pos, _bubbles[i].pos); // vector subtraction this.pos minus bubble
+                        var d = v.mag(); // calculates length / magnitude of vector from line above
 
-                    if (d < this.size / 1.9 + _bubbles[i].size / 1.9) { // is vector length d is less than two radii...
-                        if (d > 10) {
-                            this.direction.add(v) * 2;
-                        } else {
-                            this.direction.add(p5.Vector.random2D());
+                        if (d < this.size / 1.9 + _bubbles[i].size / 1.9) { // is vector length d is less than two radii...
+                            if (d > 10) {
+                                this.direction.add(v) * 2;
+                            } else {
+                                this.direction.add(p5.Vector.random2D());
+                            }
                         }
                     }
                 }
-            }
 
-            this.direction.normalize(); // make a unit vector
-            this.direction.mult(10); // multiple direction vectors by 4
-            // this.pos.add(this.direction); // position add the result of the direction multiple
+                this.direction.normalize(); // make a unit vector
+                this.direction.mult(10); // multiple direction vectors by 4
+                // this.pos.add(this.direction); // position add the result of the direction multiple
 
-            // keep away from top of graph
-            if (this.pos.x > -500 && this.pos.y < -200) { // while > -500 x, and if < -200 y; move left and down
-                this.pos.add(-70, 70, 0); // ADD x, y, z values to add to vector position > move left and down
+                // keep bubbles away from top of graph while not close to left of graph
+                if (this.pos.x > -500 && this.pos.y < -200) { // while > -500 x, and if < -200 y; move left and down
+                    this.pos.add(-70, 70, 0); // ADD x, y, z values to add to vector position > move left and down
 
-            } else if (this.pos.x < -500 && this.pos.y < -200) { // if < -500 x, and if < -200 y; move right and down
-                this.pos.add(70, 70, 0); // ADD x, y, z values to add to vector position > move right and down
+                    // keep bubbles away from top of graph and away from left of graph
+                } else if (this.pos.x < -500 && this.pos.y < -200) { // if < -500 x, and if < -200 y; move right and down
+                    this.pos.add(70, 70, 0); // ADD x, y, z values to add to vector position > move right and down
 
-            } else if (this.pos.x < 500 && this.pos.y < -200) { // while < 500 x, and if < -200 y; move right and down
-                this.pos.add(70, 70, 0); // ADD x, y, z values to add to vector position > move right and down
 
-            } else if (this.pos.x > 500 && this.pos.y < -200) { // if > 500 x, and if < -200 y; move left and down
-                this.pos.add(-70, 70, 0); // ADD x, y, z values to add to vector position > move right and down
+                    // keep bubbles away from top of graph while not close to right of graph
+                } else if (this.pos.x < 500 && this.pos.y < -200) { // while < 500 x, and if < -200 y; move right and down
+                    this.pos.add(70, 70, 0); // ADD x, y, z values to add to vector position > move right and down
 
-                // keep away from bottom of graph
-            } else if (this.pos.x > -500 && this.pos.y > 200) { // while > -500 x, and if > 200 y; move left and up
-                this.pos.sub(70, 70, 0); // SUB x, y, z values to add to vector position > move left and up
+                    // keep bubbles away from top of graph and away from right of graph
+                } else if (this.pos.x > 500 && this.pos.y < -200) { // if > 500 x, and if < -200 y; move left and down
+                    this.pos.add(-70, 70, 0); // ADD x, y, z values to add to vector position > move right and down
 
-            } else if (this.pos.x < -500 && this.pos.y > 200) { // if < -500 x, and if > 200 y; move right and up
-                this.pos.sub(-70, 70, 0); // SUB x, y, z values to add to vector position > move right and up
 
-            } else if (this.pos.x < 500 && this.pos.y > 200) { // while < 500 x, and if > 200 y; move right and up
-                this.pos.sub(-70, 70, 0) // SUB x, y, z values to add to vector position > move right and up
+                    // keep away from bottom of graph while not close to left of graph
+                } else if (this.pos.x > -500 && this.pos.y > 200) { // while > -500 x, and if > 200 y; move left and up
+                    this.pos.sub(70, 70, 0); // SUB x, y, z values to add to vector position > move left and up
 
-            } else if (this.pos.x > 500 && this.pos.y > 200) { // if < 500 x, and if > 200 y; move left and up
-                this.pos.sub(70, 70, 0) // SUB x, y, z values to add to vector position > move left and up 
+                    // keep bubbles away from bottom of graph and away from left of graph
+                } else if (this.pos.x < -500 && this.pos.y > 200) { // if < -500 x, and if > 200 y; move right and up
+                    this.pos.sub(-70, 70, 0); // SUB x, y, z values to add to vector position > move right and up
 
-            } else {
-                this.pos.add(this.direction);
-            }
 
-            if (this.size < this.target_size) { // size of ellipse
-                this.size += 1;
-            } else if (this.size > this.target_size) {
-                this.size -= 1;
-            }
-        }
+                    // keep bubbles away from bottom of graph while not close to right of graph
+                } else if (this.pos.x < 500 && this.pos.y > 200) { // while < 500 x, and if > 200 y; move right and up
+                    this.pos.sub(-70, 70, 0) // SUB x, y, z values to add to vector position > move right and up
+
+                    // keep bubbles away from bottom of graph and away from right of graph
+                } else if (this.pos.x > 500 && this.pos.y > 200) { // if < 500 x, and if > 200 y; move left and up
+                    this.pos.sub(70, 70, 0) // SUB x, y, z values to add to vector position > move left and up 
+
+                } else {
+                    this.pos.add(this.direction);
+                }
+
+                if (this.size < this.target_size) { // size of ellipse
+                    this.size += 1;
+                } else if (this.size > this.target_size) {
+                    this.size -= 1;
+                }
+            } // end update
 
         this.setData = function(i) {
             this.target_size = map(this.data[i], 0, maxAmt, 80, 360); // final size of ellipse
         }
-    }
-}
+
+    } // end bubble
+
+} // end Bubble constructor

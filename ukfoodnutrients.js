@@ -1,6 +1,6 @@
 function UKFoodNutrients() {
 
-    // Name for the visualisation to appear in the menu bar.
+    // description and sub-description for the visualisation in the menu bar
     this.name = 'UK Nutrients';
     this.subname = '(Annual Consumption)';
 
@@ -16,7 +16,7 @@ function UKFoodNutrients() {
 
     this.colours = [];
 
-    var marginSize = 50;
+    let marginSize = 50;
 
     // Layout object to store all common plot layout parameters and methods.
     this.layout = {
@@ -50,7 +50,7 @@ function UKFoodNutrients() {
 
     // preload the data; called automatically by the gallery when a visualisation is added
     this.preload = function() {
-        var self = this;
+        let self = this;
         this.data = loadTable(
             './data/food/nutrientsList.csv', 'csv', 'header',
             // Callback function to set the value this.loaded to true.
@@ -68,7 +68,7 @@ function UKFoodNutrients() {
         this.startYear = Number(this.data.columns[1]);
         this.endYear = Number(this.data.columns[this.data.columns.length - 3]);
 
-        for (var i = 0; i < this.data.getRowCount(); i++) {
+        for (let i = 0; i < this.data.getRowCount(); i++) {
             this.colours.push(color(random(0, 200), random(0, 150), random(0, 200)));
         }
 
@@ -106,6 +106,8 @@ function UKFoodNutrients() {
         }
         this.minPercentage = int(this.minSlider.value());
         this.maxPercentage = int(this.maxSlider.value());
+        this.maximumPercent = int(this.maxSlider.value());
+        console.log(this.maximumPercent);
 
         this.drawTitle(); // draw the title above the plot
 
@@ -126,47 +128,53 @@ function UKFoodNutrients() {
         drawSliderTitle2("Decrease maximum percentage (y axis)", this.layout);
 
         // Plot all pay gaps between startYear and endYear using the width of the canvas minus margins.
-        var numYears = this.endYear - this.startYear;
+        let numYears = this.endYear - this.startYear;
 
         // Loop over all rows and draw a line from the previous value to the current
-        for (var i = 0; i < this.data.getRowCount(); i++) { // items in each row
-            var row = this.data.getRow(i);
-            var previous = null; // reset to null for each row
-            var label = row.getString(0); // items in first column, A
+        for (let i = 0; i < this.data.getRowCount(); i++) { // items in each row
+            let row = this.data.getRow(i);
+            let previous = null; // reset to null for each row
+            let label = row.getString(0); // items in first column, A
 
-            for (var j = 1; j <= numYears; j++) { // each item for each year; starting column B
-                var current = { // Create an object to store data for the current year
+            for (let j = 1; j <= numYears; j++) { // each item for each year; starting column B
+                let current = { // Create an object to store data for the current year
                     'year': this.startYear + j - 1,
                     'percentage': row.getNum(j),
                 };
 
                 if (previous != null) { // previous starts at null
-                    // Draw line segment connecting previous year to current year pay gap.
-                    stroke(this.colours[i]);
-                    push();
-                    strokeWeight(2);
-                    line(this.mapYearToWidth(previous.year), // x
-                        this.mapPercentToHeight(previous.percentage), // y
-                        this.mapYearToWidth(current.year), // x
-                        this.mapPercentToHeight(current.percentage)); // y
-                    pop();
-                    // The number of x-axis labels to skip so that only numXTickLabels are drawn.
-                    var xLabelSkip = ceil(numYears / this.layout.numXTickLabels);
+                    // only when values are below the top margin
+                    if (this.mapPercentToHeight(previous.percentage) > this.layout.topMargin &&
+                        this.mapPercentToHeight(current.percentage) > this.layout.topMargin) {
 
-                    // Draw the tick label marking the start of the previous year.
-                    if (j % xLabelSkip == 0) {
-                        drawXAxisTickLabel(previous.year + 1, this.layout,
-                            this.mapYearToWidth.bind(this));
+                        // draw line segment connecting previous year to current year values
+                        stroke(this.colours[i]);
+                        push();
+                        strokeWeight(2);
+                        line(this.mapYearToWidth(previous.year), // x
+                            this.mapPercentToHeight(previous.percentage), // y
+                            this.mapYearToWidth(current.year), // x
+                            this.mapPercentToHeight(current.percentage)); // y
+                        pop();
+                        // The number of x-axis labels to skip so that only numXTickLabels are drawn.
+                        let xLabelSkip = ceil(numYears / this.layout.numXTickLabels);
+
+                        // Draw the tick label marking the start of the previous year.
+                        if (j % xLabelSkip == 0) {
+                            drawXAxisTickLabel(previous.year + 1, this.layout,
+                                this.mapYearToWidth.bind(this));
+                        }
                     }
-
                 } else { // previous === null; draw the labels first
-                    noStroke();
-                    fill(this.colours[i]);
-                    push();
-                    textStyle(BOLD);
-                    textSize(16);
-                    text(label, (150 + 65 * i), this.mapPercentToHeight(current.percentage));
-                    pop();
+                    if (this.mapPercentToHeight(current.percentage) > this.layout.topMargin) { // if below top margin
+                        noStroke();
+                        fill(this.colours[i]);
+                        push();
+                        textStyle(BOLD);
+                        textSize(16);
+                        text(label, (150 + 25 * i), this.mapPercentToHeight(current.percentage));
+                        pop();
+                    }
                 }
 
                 // Assign current year to previous year so that it is available during the next

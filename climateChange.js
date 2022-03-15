@@ -1,6 +1,6 @@
 function ClimateChange() {
 
-    // Name for the visualisation to appear in the menu bar.
+    // description and sub-description for the visualisation in the menu bar
     this.name = 'Climate Change';
 
     // Each visualisation must have a unique ID with no special characters.
@@ -77,7 +77,7 @@ function ClimateChange() {
         this.frameCount = 0;
 
         this.select = createSelect(); // create dropdown menu in DOM
-        this.select.position(this.layout.leftMargin * 6, height - 30); // place dropdown at x, y on canvas
+        this.select.position(this.layout.leftMargin * 6.5, height - 65); // place dropdown at x, y on canvas
         this.select.style('font-size', '18px');
         this.select.style('color', 'blueviolet');
         this.select.style('background-color', 'lavender');
@@ -133,7 +133,7 @@ function ClimateChange() {
         drawSliderTitle1("Adjust sarting year (x axis)", this.layout);
         drawSliderTitle2("Adjust ending year (x axis)", this.layout);
 
-        drawDropDownTitle("Temperature Background", this.layout);
+        drawDropDownTitle("Include Temperature Background", this.layout);
 
         // Prevent slider ranges overlapping.
         if (this.startSlider.value() >= this.endSlider.value()) {

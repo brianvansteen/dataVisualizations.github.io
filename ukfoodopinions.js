@@ -1,6 +1,6 @@
 function UKFoodOpinions() {
 
-    // Name for the visualisation to appear in the menu bar.
+    // description and sub-description for the visualisation in the menu bar
     this.name = 'UK Food Opinions';
     this.subname = 'Doughnut chart with values';
 
@@ -33,10 +33,10 @@ function UKFoodOpinions() {
         this.select.style('color', 'navy');
         this.select.style('background-color', 'lavender');
         this.select.style('text-align', 'center');
-        // fill the dropdown options with all geography values
-        var geographies = this.data.columns; // one geography per column
-        for (let i = 1; i < geographies.length; i++) { // index 0 is education levels
-            this.select.option(geographies[i]); // each dropdown value
+        // fill the dropdown options with all opinion values
+        var opinions = this.data.columns; // one opinion per column
+        for (let i = 1; i < opinions.length; i++) { // index 0 is education levels
+            this.select.option(opinions[i]); // each dropdown value
         }
     };
 
@@ -54,11 +54,11 @@ function UKFoodOpinions() {
             return;
         }
 
-        // Get the value of the geography we're interested in from the select item.
-        var geography = this.select.value(); // from dropdown menu
+        // Get the value of the opinion we're interested in from the select item.
+        var opinion = this.select.value(); // from dropdown menu
 
-        // Get the column of raw data for geography.
-        var col = this.data.getColumn(geography); // data from loadTable
+        // Get the column of raw data for opinion.
+        var col = this.data.getColumn(opinion); // data from loadTable
 
         // Convert all data strings to numbers.
         col = stringsToNumbers(col);
@@ -70,7 +70,7 @@ function UKFoodOpinions() {
         var colours = ['#000080', '#800000', '#006400', '#8B008B', '#FF8C00'];
 
         // Make a title.
-        var title = 'Opinion: ' + geography;
+        var title = 'Opinion: ' + opinion;
 
         // Draw the pie chart based on data from above
         this.doughnut.draw(col, labels, colours, title);

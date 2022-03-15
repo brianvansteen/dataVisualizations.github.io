@@ -1,10 +1,9 @@
 function Waffle(x, y, waffleWidth, waffleHeight, boxesWidth, boxesHeight, table, columnHeading, possibleValues) {
 
-    // Name for the visualisation to appear in the menu bar.
+    // description for the visualisation to appear in the menu bar.
     this.name = 'Daily Beverages';
 
-    // Each visualisation must have a unique ID with no special
-    // characters.
+    // Each visualisation must have a unique ID with no special characters.
     this.id = 'daily-beverages';
 
     // layout object to store all common plot layout parameters and methods.

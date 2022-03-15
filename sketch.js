@@ -12,8 +12,8 @@ function setup() {
 
     // Add the visualisation objects here.
     gallery.addVisual(new Bollinger()); // Bollinger bands
-    gallery.addVisual(new Beverages()); // NEW regression analysis
-    gallery.addVisual(new HousePricing());
+    gallery.addVisual(new HousePricing()); // NEW regression analysis
+    gallery.addVisual(new Beverages());
     gallery.addVisual(new Education()); // NEW education pie chart
     gallery.addVisual(new EducationLabels()); // NEW education pie chart
     gallery.addVisual(new PayGapTimeSeries());

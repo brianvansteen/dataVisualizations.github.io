@@ -1,6 +1,6 @@
 function PayGapTimeSeries() {
 
-    // Name for the visualisation to appear in the menu bar.
+    // description and sub-description for the visualisation in the menu bar
     this.name = 'Pay gap: 1997 to 2017';
 
     // Each visualisation must have a unique ID with no special
@@ -122,10 +122,10 @@ function PayGapTimeSeries() {
             };
 
             push();
-            stroke(100);
+            stroke(100); // draw vertical lines at each year tick
             strokeWeight(2);
-            setLineDash([4, 10]);
-            line(this.mapYearToWidth(current.year), // draw vertical lines for each year
+            setLineDash([4, 10]); // dashed line
+            line(this.mapYearToWidth(current.year), // draw vertical lines at each year tick
                 this.layout.bottomMargin,
                 this.mapYearToWidth(current.year),
                 this.mapPayGapToHeight(current.percentage));

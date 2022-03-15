@@ -50,12 +50,12 @@ function setLineDash(list) {
 function drawDropDownTitle(label, layout) { // title for drop down menu, left side
     fill(65, 105, 225);
     push();
-    textSize(16);
+    textSize(18);
     textStyle(BOLD);
     textAlign(LEFT);
     text(label,
         layout.leftMargin * 0.5,
-        layout.bottomMargin + (layout.marginSize * 2.5));
+        layout.bottomMargin + (layout.marginSize * 1.8));
     pop();
 }
 
@@ -68,7 +68,7 @@ function drawDropDownTitle2(label, layout) { // title for main drop down menu, r
     textAlign(RIGHT);
     text(label,
         layout.rightMargin * 0.97,
-        layout.bottomMargin + (layout.marginSize * 1.75));
+        layout.bottomMargin + (layout.marginSize * 2.5));
     pop();
 }
 
@@ -76,12 +76,12 @@ function drawDropDownTitle2(label, layout) { // title for main drop down menu, r
 function drawDropDownTitle3(label, layout) { // title for secondary drop down menu, right side
     fill(65, 105, 225);
     push();
-    textSize(16);
+    textSize(18);
     textStyle(BOLD);
     textAlign(RIGHT);
     text(label,
         layout.rightMargin * 0.97,
-        layout.bottomMargin + (layout.marginSize * 2.5));
+        layout.bottomMargin + (layout.marginSize * 1.8));
     pop();
 }
 

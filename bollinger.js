@@ -1,6 +1,6 @@
 function Bollinger() {
 
-    // name for the visualisation to appear in the menu bar.
+    // description and sub-description for the visualisation in the menu bar
     this.name = 'Tesla Price';
     this.subname = 'Bollinger bands';
 
@@ -11,8 +11,8 @@ function Bollinger() {
     this.title = 'Tesla Stock Price (5 years / 1,259 trading days)';
 
     // Names for each axis.
-    this.xAxisLabel = 'Number of Trading Days';
-    this.yAxisLabel = 'U.S. dollars ($)';
+    this.xAxisLabel = 'Number of Trading Days'; // x axis name
+    this.yAxisLabel = 'U.S. dollars ($)'; // y axis name
 
     let marginSize = 50;
 
@@ -59,9 +59,6 @@ function Bollinger() {
     }; // end preload
 
     this.setup = function() {
-        // // Font defaults.
-        // textSize(14);
-
         // set min and max dates
         this.startDate = this.data.getNum(0, 'days');
         this.endDate = this.data.getNum(this.data.getRowCount() - 1, 'days');
@@ -70,21 +67,21 @@ function Bollinger() {
         this.midDay = this.data.getString(Math.floor(this.data.getRowCount() / 2), 'date2'); // Excel date for sub-Xlabel
         this.endDay = this.data.getString(this.data.getRowCount() - 1, 'date2'); // Excel date for sub-Xlabel ending series date
 
-        // find min and max stock price for mapping to canvas height.
+        // find min and max stock price for mapping to aix height.
         this.minPrice = 0; // zero stock price
-        this.maxPrice = max(this.data.getColumn('close')) * 1.25; // max price times 125% for the upper Bollinger band
+        this.maxPrice = max(this.data.getColumn('close')) * 1.25; // max closing stock price times 125% for the upper Bollinger band
 
         // count the number of frames drawn since the visualisation started to animate the plot
         this.frameCount = 0;
 
-        this.allPricing = [];
+        this.allPricing = []; // array for all pricing data, to be used in simple moving average calculation
         for (let i = 0; i < this.data.getRowCount(); i++) {
             this.allPricing.push(this.data.getNum(i, 'close'));
         }
 
         this.select1 = createSelect(); // create dropdown menu in DOM
-        this.select1.position(this.layout.leftMargin * 6, height - 30); // place dropdown at x, y on canvas
-        this.select1.style('font-size', '18px');
+        this.select1.position(this.layout.leftMargin * 6, height - 65); // place dropdown at x, y on canvas
+        this.select1.style('font-size', '20px');
         this.select1.style('color', 'blueviolet');
         this.select1.style('background-color', 'lavender');
         this.select1.style('text-align', 'center');
@@ -94,7 +91,7 @@ function Bollinger() {
         }
 
         this.select2 = createSelect(); // create sub-dropdown menu in DOM
-        this.select2.position(this.layout.rightMargin * 1.22, height - 65); // place dropdown at x, y on canvas
+        this.select2.position(this.layout.rightMargin * 1.22, height - 30); // place dropdown at x, y on canvas
         this.select2.style('font-size', '12px');
         this.select2.style('color', 'blueviolet');
         this.select2.style('background-color', 'lavender');
@@ -105,8 +102,8 @@ function Bollinger() {
         }
 
         this.select3 = createSelect(); // create dropdown menu in DOM
-        this.select3.position(this.layout.rightMargin * 1.22, height - 30); // place dropdown at x, y on canvas
-        this.select3.style('font-size', '18px');
+        this.select3.position(this.layout.rightMargin * 1.22, height - 65); // place dropdown at x, y on canvas
+        this.select3.style('font-size', '20px');
         this.select3.style('color', 'blueviolet');
         this.select3.style('background-color', 'lavender');
         this.select3.style('text-align', 'center');
@@ -116,7 +113,6 @@ function Bollinger() {
         }
 
     }; // end setup
-
 
     this.destroy = function() {
         this.select1.remove(); // remove dropdown menu

@@ -40,7 +40,7 @@ function DoughnutChart(x, y, diameter) {
         let mouseAngle = createVector(100, 0).angleBetween(createVector(mouseX - this.x, mouseY - this.y));
         // calculate angle, in radians, between vector(100,0) and vector of mouse position versus center of doughnut
         if (mouseAngle < 0) {
-            mouseAngle += TWO_PI; // to ensure the mouseAngle is only a positive value
+            mouseAngle += TWO_PI; // to ensure the mouseAngle is only a positive value, at 2 pi when result is negative
         }
 
         for (let i = 0; i < data.length; i++) {
@@ -101,6 +101,7 @@ function DoughnutChart(x, y, diameter) {
                 if (mouseAngle > startAngle && mouseAngle < startAngle + stopAngle) {
                     // check if mouse is hovering over current doughnut slice; mouseAngle in radians
                     // versus the doughnut slices in radians
+                    //console.log(mouseAngle);
                     push();
                     fill(colours[j]);
                     rect(this.x - 50, this.y - 5, 100, 70)
