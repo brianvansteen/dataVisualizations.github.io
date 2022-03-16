@@ -22,13 +22,13 @@ function Beverages() {
         bottomMargin: height - marginSize * 3,
         pad: 5,
 
-        plotWidth: function() {
+        plotWidth: function() { // use for drawing title
             return this.rightMargin - this.leftMargin;
         },
 
-        plotHeight: function() {
-            return this.bottomMargin - this.topMargin;
-        },
+        // plotHeight: function() {
+        //     return this.bottomMargin - this.topMargin;
+        // },
 
         // Boolean to enable/disable background grid.
         grid: true,
@@ -40,10 +40,10 @@ function Beverages() {
     }; // end layout
 
     this.bubbles = []; // array for bubbles showing data
-    let maxAmt;
+    let maxAmt; // max size of each bubble
     this.times = []; // array for survey result consumption times
 
-    this.preload = function() {
+    this.preload = function() { // load the data for the data visualization
         var self = this;
         this.data = loadTable(
             './data/food/beveragesFinal.csv', 'csv', 'header',
@@ -55,22 +55,20 @@ function Beverages() {
 
     this.setup = function() {
 
-        this.rows = this.data.getRows();
-
-        this.numColumns = this.data.getColumnCount();
-
+        this.rows = this.data.getRows(); // data object with values for each individual beverage
+        this.numColumns = this.data.getColumnCount(); // 6 columns
         maxAmt = 0;
 
         for (var i = 0; i < this.rows.length; i++) {
-            var b = new Bubble(this.rows[i].get(0));
+            var b = new Bubble(this.rows[i].get(0)); // bubble for each beverage
             for (var j = 1; j < this.numColumns; j++) {
-                var n = this.rows[i].getNum(j);
-                if (n > maxAmt) {
+                var n = this.rows[i].getNum(j); // survey response numbers for each beverage row, but column
+                if (n > maxAmt) { // survey response value
                     maxAmt = n; //keep a tally of the highest value
                 }
-                b.data.push(n);
+                b.data.push(n); // push value to data array, line 135
             }
-            this.bubbles.push(b);
+            this.bubbles.push(b); // push to bubbles array
         }
 
         for (var i = 0; i < this.bubbles.length; i++) {
@@ -92,13 +90,13 @@ function Beverages() {
 
     this.changeTime = function(time) {
         for (var i = 0; i < this.bubbles.length; i++) {
-            this.bubbles[i].setData(time);
+            this.bubbles[i].setData(time); // use response values based on time of day selector
         }
     };
 
     this.destroy = function() {
-        this.bubbles = []; // remove bubbles
-        this.select1.remove(); // remove dropdown menu
+        this.bubbles = []; // remove bubbles when selecting different extension
+        this.select1.remove(); // remove dropdown menu when selecting different extension
     };
 
     this.draw = function() {
@@ -111,7 +109,7 @@ function Beverages() {
                 this.bubbles[i].draw(); // call this.draw after update
             }
             let timeOfDay = ['Totals', 'Morning', 'Afternoon', 'Evening', 'Night'];
-            this.changeTime(timeOfDay.indexOf(this.select1.value()));
+            this.changeTime(timeOfDay.indexOf(this.select1.value())); // assign numerical index value based on selector value
 
         } // end draw
 
@@ -134,7 +132,7 @@ function Beverages() {
         this.direction = createVector(0, 0);
         this.name = _name; // private property
         this.color = color(random(50, 200), random(50, 200), random(50, 200));
-        this.data = [];
+        this.data = []; // beverage response values; pushed from line 69
 
         this.draw = function() {
             push();
@@ -158,9 +156,9 @@ function Beverages() {
                         var v = p5.Vector.sub(this.pos, _bubbles[i].pos); // vector subtraction this.pos minus bubble
                         var d = v.mag(); // calculates length / magnitude of vector from line above
 
-                        if (d < this.size / 1.9 + _bubbles[i].size / 1.9) { // is vector length d is less than two radii...
+                        if (d < this.size / 1.9 + _bubbles[i].size / 1.9) { // if vector length d is less than two radii...
                             if (d > 10) {
-                                this.direction.add(v) * 2;
+                                this.direction.add(v) * 2; // add vector values to move bubbles away from each oterh
                             } else {
                                 this.direction.add(p5.Vector.random2D());
                             }

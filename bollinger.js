@@ -60,12 +60,12 @@ function Bollinger() {
 
     this.setup = function() {
         // set min and max dates
-        this.startDate = this.data.getNum(0, 'days');
-        this.endDate = this.data.getNum(this.data.getRowCount() - 1, 'days');
+        this.startDate = this.data.getNum(0, 'days'); // day 0 of closing price data; used to map X axis
+        this.endDate = this.data.getNum(this.data.getRowCount() - 1, 'days'); // day 1259 of closing price data; used to map X axis
 
-        this.startDay = this.data.getString(0, 'date2'); // Excel date for sub-Xlabel starting series date
-        this.midDay = this.data.getString(Math.floor(this.data.getRowCount() / 2), 'date2'); // Excel date for sub-Xlabel
-        this.endDay = this.data.getString(this.data.getRowCount() - 1, 'date2'); // Excel date for sub-Xlabel ending series date
+        this.startDay = this.data.getString(0, 'date2'); // Excel date (DD-MM-YY) for sub-Xlabel starting series date
+        this.midDay = this.data.getString(Math.floor(this.data.getRowCount() / 2), 'date2'); // Excel date (DD-MM-YY) for sub-Xlabel
+        this.endDay = this.data.getString(this.data.getRowCount() - 1, 'date2'); // Excel date (DD-MM-YY) for sub-Xlabel ending series date
 
         // find min and max stock price for mapping to aix height.
         this.minPrice = 0; // zero stock price
@@ -76,7 +76,7 @@ function Bollinger() {
 
         this.allPricing = []; // array for all pricing data, to be used in simple moving average calculation
         for (let i = 0; i < this.data.getRowCount(); i++) {
-            this.allPricing.push(this.data.getNum(i, 'close'));
+            this.allPricing.push(this.data.getNum(i, 'close')); // get closing prices from 'close' column
         }
 
         this.select1 = createSelect(); // create dropdown menu in DOM
@@ -85,20 +85,9 @@ function Bollinger() {
         this.select1.style('color', 'blueviolet');
         this.select1.style('background-color', 'lavender');
         this.select1.style('text-align', 'center');
-        let smaValue1 = [1, 20, 50, 100, 200] // values for the dropdown menu
+        let smaValue1 = [1, 20, 50, 100, 200] // values for the dropdown menu for simple moving average (SMA)
         for (let i = 0; i < smaValue1.length; i++) {
             this.select1.option(smaValue1[i]); // each dropdown value
-        }
-
-        this.select2 = createSelect(); // create sub-dropdown menu in DOM
-        this.select2.position(this.layout.rightMargin * 1.22, height - 30); // place dropdown at x, y on canvas
-        this.select2.style('font-size', '12px');
-        this.select2.style('color', 'blueviolet');
-        this.select2.style('background-color', 'lavender');
-        this.select2.style('text-align', 'center');
-        let smaValue2 = [20] // value for the sub-dropdown menu
-        for (let i = 0; i < smaValue2.length; i++) {
-            this.select2.option(smaValue2[i]); // each dropdown value
         }
 
         this.select3 = createSelect(); // create dropdown menu in DOM
@@ -107,7 +96,7 @@ function Bollinger() {
         this.select3.style('color', 'blueviolet');
         this.select3.style('background-color', 'lavender');
         this.select3.style('text-align', 'center');
-        let sdValue = [2, 3, 4] // values for the dropdown menu
+        let sdValue = [2, 3, 4] // values for the dropdown menu for standard deviation values
         for (let i = 0; i < sdValue.length; i++) {
             this.select3.option(sdValue[i]); // each dropdown value
         }
@@ -116,7 +105,7 @@ function Bollinger() {
 
     this.destroy = function() {
         this.select1.remove(); // remove dropdown menu
-        this.select2.remove(); // remove dropdown menu
+        //this.select2.remove(); // remove dropdown menu
         this.select3.remove(); // remove dropdown menu
     };
 
@@ -144,18 +133,16 @@ function Bollinger() {
         drawXAxisSubLabels(this.startDay, this.midDay, this.endDay, this.layout); // draw x and y axis labels; helper function
 
         drawDropDownTitle("Simple Moving Average (days)", this.layout); // left drop down
-        drawDropDownTitle2("(Default Simple Moving Average, days)", this.layout); // right secondary drop down
         drawDropDownTitle3("Bollinger bands (standard deviations)", this.layout); // right drop down
 
         // Plot all stock prices between startDate and endDate using the width of the canvas minus margins.
         let smaPrevious; // simple moving average
         let sdPrevious; // standard deviation
         let previous; // daily price
-        let numDays = this.endDate - this.startDate;
+        let numDays = this.endDate - this.startDate; // for X axis values
         let sma = int(this.select1.value()); // from SMA dropdown menu
         this.smaPricing = this.simpleMovingAverage(this.allPricing, sma); // dimplr moving average value
         this.sdPricing = this.smaSD(this.allPricing, sma); // standard deviation value of simple moving average
-        this.sdSlice = this.sdPricing.slice(800, 1100);
 
         // Count the number of days plotted each frame to create animation effect.
         let dayCount = 0;
@@ -170,8 +157,9 @@ function Bollinger() {
                 'price': this.data.getNum(i, 'close')
             };
 
+            // raw closing price data
             if (previous != null) {
-                // Draw line segment connecting previous year to current year stock price.
+                // draw line segment connecting previous day to current day closing stock price.
                 push();
                 stroke(192, 192, 192);
                 strokeWeight(1);
@@ -200,7 +188,7 @@ function Bollinger() {
                 'sdPrice': this.sdPricing[i],
             };
 
-            if (smaPrevious != null) {
+            if (smaPrevious != null) { // simple moving average
                 // draw line segment connecting previous day to current day simple moving average value
                 push();
                 stroke(139, 0, 139);
@@ -268,28 +256,28 @@ function Bollinger() {
 
     }; // end draw
 
-    this.simpleMovingAverage = function(data, window) { // moving average of 'window' values
+    this.simpleMovingAverage = function(data, window) { // calculate moving average of 'dropdown' value
         let result = [];
         if (data.lenth < window) {
             return result;
         }
         let sum = 0;
-        for (let i = 0; i < window; i++) { // build initial array of length 'window'
+        for (let i = 0; i < window; i++) { // build initial array of length 'dropdown' value; i.e. array of 20
             sum += data[i];
         }
         result.push(sum / window);
-        let steps = data.length - window - 1; // array length less size of window
+        let steps = data.length - window - 1; // 5 years of data, less lenght of 'dropdown' value
         for (let i = 0; i < steps; i++) {
-            sum -= data[i]; // remove one data point
-            sum += data[i + window]; // add one data point
+            sum -= data[i]; // remove one data point from array of 'dropdown' values
+            sum += data[i + window]; // add one data point to array of 'dropdown' values
             result.push(sum / window); // push changes to array
         }
         return result;
     }
 
-    this.smaSD = function(data, window) { // standard deviation of simple moving average
-        let resultSD = [];
-        let smaWindow = [];
+    this.smaSD = function(data, window) { // standard deviation of simple moving average 'dropdown' value (window)
+        let resultSD = []; // standard deviation values to draw
+        let smaWindow = []; // size of the simple moving average array, based on 'dropdown' value selected
         if (data.lenth < window) {
             return resultSD;
         }
@@ -299,7 +287,8 @@ function Bollinger() {
         let mean = smaWindow.reduce((smaWindow, curr) => { return smaWindow + curr }, 0) / window; // create average
         smaSquare = smaWindow.map((k) => { return (k - mean) ** 2 }) // sqaure of each (value minus average)
         let sum = smaSquare.reduce((smaWindow, curr) => smaWindow + curr, 0); // sum the updated array
-        resultSD.push(Math.sqrt(sum / window)); // build initial array of length 'window'
+
+        resultSD.push(Math.sqrt(sum / window)); // build initial value of square root of sum / window (SMA length)
         let steps = data.length - window - 1; // array length of size of window
         for (let i = 0; i < steps; i++) {
             smaWindow.shift(); // remove one data point
@@ -307,7 +296,7 @@ function Bollinger() {
             let mean = smaWindow.reduce((smaWindow, curr) => { return smaWindow + curr }, 0) / window; // create average
             smaSquare = smaWindow.map((k) => { return (k - mean) ** 2 }) // sqaure of each (value minus average)
             let sum = smaSquare.reduce((smaWindow, curr) => smaWindow + curr, 0); // sum the updated array
-            resultSD.push(Math.sqrt(sum / window));
+            resultSD.push(Math.sqrt(sum / window)); //square root of sum / window (SMA length)
         }
         return resultSD;
     }
