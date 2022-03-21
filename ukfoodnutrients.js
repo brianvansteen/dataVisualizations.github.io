@@ -2,7 +2,7 @@ function UKFoodNutrients() {
 
     // description and sub-description for the visualisation in the menu bar
     this.name = 'UK Nutrients';
-    this.subname = '(Annual Consumption)';
+    this.subname = '(annual consumption)';
 
     // Each visualisation must have a unique ID with no special characters.
     this.id = 'uk-food-nutrients';
@@ -57,7 +57,6 @@ function UKFoodNutrients() {
             function(table) {
                 self.loaded = true;
             });
-
     };
 
     this.setup = function() {
@@ -76,15 +75,16 @@ function UKFoodNutrients() {
         this.minPercentage = 0;
         this.maxPercentage = 600;
 
-        // Create sliders to control start and end years; default to visualise full range
-        this.minSlider = createSlider(this.minPercentage,
-            this.minPercentage + 75,
-            this.minPercentage,
+        // Create sliders to control minimum percentages to use on the Y axis
+        this.minSlider = createSlider(this.minPercentage, // minimum slider value, 0
+            this.minPercentage + 75, // maximum value, i.e. 75
+            this.minPercentage, // default value
             1);
         this.minSlider.position(600, 70);
 
-        this.maxSlider = createSlider(this.minPercentage + 250,
-            this.maxPercentage,
+        // Create sliders to control maximum percentages to use on the Y axis
+        this.maxSlider = createSlider(this.minPercentage + 250, // minimum slider value, i.e. 250
+            this.maxPercentage, // maximum value, 600
             this.maxPercentage,
             1);
         this.maxSlider.position(1200, 70);
@@ -107,7 +107,6 @@ function UKFoodNutrients() {
         this.minPercentage = int(this.minSlider.value());
         this.maxPercentage = int(this.maxSlider.value());
         this.maximumPercent = int(this.maxSlider.value());
-        console.log(this.maximumPercent);
 
         this.drawTitle(); // draw the title above the plot
 
@@ -172,7 +171,7 @@ function UKFoodNutrients() {
                         push();
                         textStyle(BOLD);
                         textSize(16);
-                        text(label, (150 + 25 * i), this.mapPercentToHeight(current.percentage));
+                        text(label, (150 + 25 * i), this.mapPercentToHeight(current.percentage)); // draw text labels first
                         pop();
                     }
                 }

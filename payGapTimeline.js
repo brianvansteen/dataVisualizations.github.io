@@ -2,6 +2,7 @@ function PayGapTimeSeries() {
 
     // description and sub-description for the visualisation in the menu bar
     this.name = 'Pay gap: 1997 to 2017';
+    this.subname = 'Line graph';
 
     // Each visualisation must have a unique ID with no special
     // characters.

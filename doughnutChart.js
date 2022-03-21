@@ -73,7 +73,7 @@ function DoughnutChart(x, y, diameter) {
             text(title, width / 2, this.y - this.diameter * 0.58);
         }
 
-        // knock a hole out of the middle of the doughnut
+        // knock a hole out of the middle of the pie, to create a doughnut
         push();
         fill(250, 250, 210);
         stroke(50);
@@ -89,12 +89,12 @@ function DoughnutChart(x, y, diameter) {
         textSize(40);
         text("Value: ", this.x, this.y - 30); // doughnut slice values to be drawn in center
 
-        let startAngle = 0
+        let startAngle = 0 // starting point
 
         for (let j = 0; j < data.length; j++) { // mouse hover calculations
             let stopAngle = data[j] * TWO_PI; // convert percent values from data[j] to radians
             if (mouseDist > this.diameter * 0.225 && // check if mouse hovering over doughnut, greater than inner ring
-                mouseDist < this.diameter * 0.5) { // check if mouse hovering over doughnut, less that outer ring
+                mouseDist < this.diameter * 0.5) { // check if mouse hovering over doughnut, less than outer ring
 
                 if (mouseAngle > startAngle && mouseAngle < startAngle + stopAngle) {
                     // check if mouse is hovering over current doughnut slice; mouseAngle in radians

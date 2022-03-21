@@ -12,20 +12,19 @@ function setup() {
 
     // Add the visualisation objects here.
     gallery.addVisual(new Bollinger()); // Bollinger bands
-    gallery.addVisual(new HousePricing()); // NEW regression analysis
-    gallery.addVisual(new Beverages());
-    gallery.addVisual(new Education()); // NEW education pie chart
-    gallery.addVisual(new EducationLabels()); // NEW education pie chart
-    gallery.addVisual(new PayGapTimeSeries());
-    gallery.addVisual(new UKFoodOpinions());
-    gallery.addVisual(new UKFoodNutrients());
-    gallery.addVisual(new ClimateChange());
+    gallery.addVisual(new HousePricing()); // linear regression analysis
+    gallery.addVisual(new Beverages()); // bubble chart
+    gallery.addVisual(new EducationLabels()); // education pie chart
+    gallery.addVisual(new UKFoodOpinions()); // doughnut chart
+    gallery.addVisual(new PayGapTimeSeries()); // line graph
+    gallery.addVisual(new UKFoodNutrients()); // multi-line graph
+    gallery.addVisual(new ClimateChange()); // line graph
 
     //gallery.addVisual(new Waffle());
 }
 
 function draw() {
-    background(250, 250, 210);
+    background(255, 250, 240); // canvas colour
     if (gallery.selectedVisual != null) { // based on mouseClicked in gallery.js; assiged visual id
         gallery.selectedVisual.draw();
     }

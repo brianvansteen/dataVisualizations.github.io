@@ -114,6 +114,23 @@ function Bollinger() {
             console.log('Data not yet loaded');
             return;
         }
+        // colour-code legend for lines drawn
+        push();
+        textAlign(LEFT);
+        textSize(20);
+        fill(192);
+        rect(150, 100, 10, 10);
+        text("Daily closing price", 180, 105)
+        fill(139, 0, 139);
+        rect(150, 130, 10, 10);
+        text("Simple Moving Average price", 180, 135)
+        fill(34, 139, 34);
+        rect(150, 160, 10, 10);
+        text("Upper Bollinger band", 180, 165)
+        fill(178, 34, 34);
+        rect(150, 190, 10, 10);
+        text("Lower Bollinger band", 180, 195)
+        pop();
 
         this.drawTitle(); // draw the title above the plot
 

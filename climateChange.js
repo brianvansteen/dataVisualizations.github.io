@@ -2,6 +2,7 @@ function ClimateChange() {
 
     // description and sub-description for the visualisation in the menu bar
     this.name = 'Climate Change';
+    this.subname = '(annual temperature delta)';
 
     // Each visualisation must have a unique ID with no special characters.
     this.id = 'climate-change';

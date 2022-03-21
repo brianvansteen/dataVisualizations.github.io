@@ -76,8 +76,8 @@ function Beverages() {
         }
 
         this.select1 = createSelect(); // create dropdown menu in DOM
-        this.select1.position(this.layout.leftMargin * 3.5, height - 30); // place dropdown at x, y on canvas
-        this.select1.style('font-size', '18px');
+        this.select1.position(this.layout.rightMargin * 1, height - 770); // place dropdown at x, y on canvas
+        this.select1.style('font-size', '28px');
         this.select1.style('color', 'blueviolet');
         this.select1.style('background-color', 'lavender');
         this.select1.style('text-align', 'center');

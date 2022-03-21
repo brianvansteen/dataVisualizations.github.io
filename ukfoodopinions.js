@@ -44,8 +44,7 @@ function UKFoodOpinions() {
         this.select.remove(); // dropdown menue
     };
 
-    // Create a new pie chart object, from pie-chart.js
-    // this.pie = new PieChart(width / 2, height / 2, width * 0.4);
+    // Create a new doughnut chart object, from doughnutChart.js
     this.doughnut = new DoughnutChart(width * 0.35, height / 2, 500);
 
     this.draw = function() {
