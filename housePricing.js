@@ -65,7 +65,7 @@ function HousePricing() {
         this.propertySize = int(this.data.getColumn('size')); // size scaled to 100
         this.propertyRaw = int(this.data.getColumn('rawSize')); // raw property size
 
-        this.baseArray = this.propertySize.length;
+        this.baseArray = this.propertySize.length; // number of house price sales (399); assigned to base case array
 
         for (let i = 0; i < this.removeOutliers; i++) {
             let max = Math.max(...this.salesPrice);
@@ -263,18 +263,20 @@ function HousePricing() {
             fill(0, 150, 0);
             ellipse(320, this.layout.topMargin + this.pad, 100, 40); // highlight extreme outliers
 
-            if (this.salesPrice.length > this.baseArray - this.removeOutliers) {
-                for (let i = 0; i < this.removeOutliers; i++) {
-                    let max = Math.max(...this.salesPrice);
-                    let maxIdx = this.salesPrice.indexOf(max);
-                    this.salesPriceTemp.push(this.salesPrice[maxIdx]);
-                    this.propertySizeTemp.push(this.propertySize[maxIdx]);
-                    this.salesPrice.splice(maxIdx, 1);
-                    this.propertySize.splice(maxIdx, 1);
+            // when this.removeOutliers is != 0
+            if (this.salesPrice.length > this.baseArray - this.removeOutliers) { // if number of sales prices greater than base array minus outliers to remove
+                for (let i = 0; i < this.removeOutliers; i++) { // number of outliers to remove
+                    let max = Math.max(...this.salesPrice); // identify max price
+                    let maxIdx = this.salesPrice.indexOf(max); // identify index of max price
+                    this.salesPriceTemp.push(this.salesPrice[maxIdx]); // push price to temp array, based on maxIdx
+                    this.propertySizeTemp.push(this.propertySize[maxIdx]); // push property size to temp array, based on maxIdx
+                    this.salesPrice.splice(maxIdx, 1); // remove price based on maxIdx from working array
+                    this.propertySize.splice(maxIdx, 1); // remove property size based on maxIdx from working array
                 }
 
-                this.slopeLine = this.linearRegressionSlope(this.salesPrice, this.propertySize);
-                this.intercept = this.linearRegressionIntercept(this.salesPrice, this.propertySize, this.slopeLine);
+                // calculated linear regression terms after outliers have been removed from above calculations
+                this.slopeLine = this.linearRegressionSlope(this.salesPrice, this.propertySize); // calculate slope
+                this.intercept = this.linearRegressionIntercept(this.salesPrice, this.propertySize, this.slopeLine); // calculate intercept
                 this.r2 = this.linearRegressionR(this.salesPrice, this.propertySize);
                 this.r2 = Math.round(this.r2 * 1000) / 10;
 
@@ -380,11 +382,11 @@ function HousePricing() {
 
             for (let i = 0; i < price.length; i++) {
 
-                sum_size += size[i];
-                sum_price += price[i];
-                sum_sp += (size[i] * price[i]);
-                sum_ss += (size[i] * size[i]);
-                sum_pp += (price[i] * price[i]);
+                sum_size += size[i]; // total size
+                sum_price += price[i]; // total price
+                sum_sp += (size[i] * price[i]); // price times size, summed
+                sum_ss += (size[i] * size[i]); // size squared, summed
+                sum_pp += (price[i] * price[i]); // price squared, summed
             }
 
             slope = (n * sum_sp - sum_size * sum_price) / (n * sum_ss - sum_size * sum_size);
@@ -399,8 +401,8 @@ function HousePricing() {
 
             for (let i = 0; i < price.length; i++) {
 
-                sum_size += size[i];
-                sum_price += price[i];
+                sum_size += size[i]; // total size
+                sum_price += price[i]; // total price
 
             }
 
@@ -419,11 +421,11 @@ function HousePricing() {
 
             for (let i = 0; i < price.length; i++) {
 
-                sum_size += size[i];
-                sum_price += price[i];
-                sum_sp += (size[i] * price[i]);
-                sum_ss += (size[i] * size[i]);
-                sum_pp += (price[i] * price[i]);
+                sum_size += size[i]; // total size
+                sum_price += price[i]; // total price
+                sum_sp += (size[i] * price[i]); // price times size, summed
+                sum_ss += (size[i] * size[i]); // size squared, summed
+                sum_pp += (price[i] * price[i]); // price squared, summed
             }
 
             r2 = Math.pow((n * sum_sp - sum_size * sum_price) /
