@@ -48,10 +48,6 @@ function EducationLabels() {
     this.pie = new PieChartLabels(width * 0.35, height / 2, 500); // x, y, diameter
 
     this.draw = function() {
-        if (!this.loaded) {
-            console.log('Data not yet loaded');
-            return;
-        }
 
         // Get the value of the Canadian geography we're interested in from the select item.
         let geography = this.select.value(); // from dropdown menu

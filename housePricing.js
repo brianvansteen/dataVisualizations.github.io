@@ -67,13 +67,6 @@ function HousePricing() {
 
         this.baseArray = this.propertySize.length;
 
-        // for (let i = 0; i < this.removeOutliers; i++) {
-        //     let max = Math.max(...this.salesPrice);
-        //     let maxIdx = this.salesPrice.indexOf(max);
-        //     this.salesPrice.splice(maxIdx, 1);
-        //     this.propertySize.splice(maxIdx, 1);
-        // }
-
         // minimum and maximum property size for x axis
         this.minSize = min(this.data.getColumn('size')); // scaled size to 100
         this.maxSize = max(this.data.getColumn('size')); // scaled size to 100
@@ -86,33 +79,6 @@ function HousePricing() {
 
         this.minSaleLabel = this.minSale / 1000; // sale price in hundreds
         this.maxSaleLabel = this.maxSale / 1000; // sale price in hundreds
-
-        // this.slopeLine = this.linearRegressionSlope(this.salesPrice, this.propertySize);
-        // this.intercept = this.linearRegressionIntercept(this.salesPrice, this.propertySize, this.slopeLine);
-        // this.r2 = this.linearRegressionR(this.salesPrice, this.propertySize);
-        // this.r2 = Math.round(this.r2 * 1000) / 10;
-
-        // this.regressionLine = []; // generate y values of regression line
-        // for (i = 0; i < this.propertySize.length; i++) {
-        //     this.regressionLine.push(this.intercept / 1000 + this.slopeLine / 1000 * i);
-        // }
-        // console.log(this.regressionLine);
-
-        // this.regressionX = [] // generate number of x values for regression line
-        // for (i = 0; i < this.propertySize.length; i++) {
-        //     this.regressionX.push(i);
-        // }
-
-        // this.select = createSelect(); // create dropdown menu in DOM
-        // this.select.position(this.layout.leftMargin * 4.5, height - 30); // place dropdown at x, y on canvas
-        // this.select.style('font-size', '18px');
-        // this.select.style('color', 'blueviolet');
-        // this.select.style('background-color', 'lavender');
-        // this.select.style('text-align', 'center');
-        // let dataSelected = ["AllData", "CoreData (ex. outliers)", "TestData"] // values for the dropdown menu
-        // for (let i = 0; i < dataSelected.length; i++) {
-        //     this.select.option(dataSelected[i]); // each dropdown value
-        // }
 
         this.select2 = createSelect(); // create sub-dropdown menu in DOM
         this.select2.position(this.layout.rightMargin * 1.055, height - 65); // place dropdown at x, y on canvas
@@ -135,9 +101,6 @@ function HousePricing() {
         for (let i = 0; i < regressionResult.length; i++) {
             this.select3.option(regressionResult[i]); // each dropdown value
         }
-
-        // count the number of frames drawn since the visualisation started to animate the plot
-        // this.frameCount = 0;
 
         noLoop();
 
@@ -197,12 +160,7 @@ function HousePricing() {
             pop();
         }
 
-        // Plot all pay gaps between smallest size (x value) and largest size (x value)
-        // using the width of the canvas minus margins.
         let previous;
-
-        // // Count the number of days plotted each frame to create animation effect.
-        // let xAxisCount = 0;
 
         if (goodness === "r-squared" && outliers === '0') { // when drop down value selected draw regression line and value
 
@@ -249,7 +207,6 @@ function HousePricing() {
 
                 if (previous != null) {
                     // Draw line segment connecting previous value to current value
-                    //console.log(current.size, current.price);
                     push();
                     stroke(139, 0, 139);
                     strokeWeight(3);
@@ -259,18 +216,12 @@ function HousePricing() {
                         this.mapPriceToHeight(current.price));
                     pop();
 
-                    // xAxisCount++;
-
                 }; // end if
 
                 // Assign current year to previous year so that it is available during the next iteration of 
                 // this loop to give us the start position of the next line segment.
                 previous = current;
             }; // end for loop
-
-            // Count the number of frames since this visualisation started; used in creating the
-            // animation effect and to stop the main p5 draw loop when all days have been drawn.
-            // this.frameCount++;
 
         } // end if
 
@@ -304,8 +255,6 @@ function HousePricing() {
                     this.salesPrice.splice(maxIdx, 1);
                     this.propertySize.splice(maxIdx, 1);
                 }
-
-                console.log(this.salesPrice.length, this.propertySize.length);
 
                 this.slopeLine = this.linearRegressionSlope(this.salesPrice, this.propertySize);
                 this.intercept = this.linearRegressionIntercept(this.salesPrice, this.propertySize, this.slopeLine);
@@ -399,7 +348,6 @@ function HousePricing() {
         for (let i = 0; i < value; i++) {
             let max = Math.max(...this.salesPrice);
             let maxIdx = this.salesPrice.indexOf(max);
-            console.log(max, maxIdx);
             this.salesPrice.splice(maxIdx, 1);
             this.propertySize.splice(maxIdx, 1);
         }

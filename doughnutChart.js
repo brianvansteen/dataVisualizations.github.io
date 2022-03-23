@@ -101,7 +101,7 @@ function DoughnutChart(x, y, diameter) {
                     // versus the doughnut slices in radians
                     push();
                     fill(colours[j]);
-                    rect(this.x - 50, this.y - 5, 100, 70)
+                    rect(this.x - 50, this.y - 5, 100, 65)
                     fill(255);
                     noStroke();
                     textSize(40)
