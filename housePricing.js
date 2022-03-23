@@ -1,6 +1,6 @@
 function HousePricing() {
 
-    // description and sub-description for the visualisation in the menu bar
+    // Name for the visualisation to appear in the menu bar.
     this.name = 'House Pricing';
     this.subname = 'Linear Regression Analysis';
 
@@ -65,15 +65,14 @@ function HousePricing() {
         this.propertySize = int(this.data.getColumn('size')); // size scaled to 100
         this.propertyRaw = int(this.data.getColumn('rawSize')); // raw property size
 
-        this.baseArray = this.propertySize.length; // number of house price sales (399); assigned to base case array
+        this.baseArray = this.propertySize.length;
 
-        for (let i = 0; i < this.removeOutliers; i++) {
-            let max = Math.max(...this.salesPrice);
-            let maxIdx = this.salesPrice.indexOf(max);
-            //console.log(max, maxIdx);
-            this.salesPrice.splice(maxIdx, 1);
-            this.propertySize.splice(maxIdx, 1);
-        }
+        // for (let i = 0; i < this.removeOutliers; i++) {
+        //     let max = Math.max(...this.salesPrice);
+        //     let maxIdx = this.salesPrice.indexOf(max);
+        //     this.salesPrice.splice(maxIdx, 1);
+        //     this.propertySize.splice(maxIdx, 1);
+        // }
 
         // minimum and maximum property size for x axis
         this.minSize = min(this.data.getColumn('size')); // scaled size to 100
@@ -88,8 +87,35 @@ function HousePricing() {
         this.minSaleLabel = this.minSale / 1000; // sale price in hundreds
         this.maxSaleLabel = this.maxSale / 1000; // sale price in hundreds
 
+        // this.slopeLine = this.linearRegressionSlope(this.salesPrice, this.propertySize);
+        // this.intercept = this.linearRegressionIntercept(this.salesPrice, this.propertySize, this.slopeLine);
+        // this.r2 = this.linearRegressionR(this.salesPrice, this.propertySize);
+        // this.r2 = Math.round(this.r2 * 1000) / 10;
+
+        // this.regressionLine = []; // generate y values of regression line
+        // for (i = 0; i < this.propertySize.length; i++) {
+        //     this.regressionLine.push(this.intercept / 1000 + this.slopeLine / 1000 * i);
+        // }
+        // console.log(this.regressionLine);
+
+        // this.regressionX = [] // generate number of x values for regression line
+        // for (i = 0; i < this.propertySize.length; i++) {
+        //     this.regressionX.push(i);
+        // }
+
+        // this.select = createSelect(); // create dropdown menu in DOM
+        // this.select.position(this.layout.leftMargin * 4.5, height - 30); // place dropdown at x, y on canvas
+        // this.select.style('font-size', '18px');
+        // this.select.style('color', 'blueviolet');
+        // this.select.style('background-color', 'lavender');
+        // this.select.style('text-align', 'center');
+        // let dataSelected = ["AllData", "CoreData (ex. outliers)", "TestData"] // values for the dropdown menu
+        // for (let i = 0; i < dataSelected.length; i++) {
+        //     this.select.option(dataSelected[i]); // each dropdown value
+        // }
+
         this.select2 = createSelect(); // create sub-dropdown menu in DOM
-        this.select2.position(this.layout.rightMargin * 1.055, height - 30); // place dropdown at x, y on canvas
+        this.select2.position(this.layout.rightMargin * 1.055, height - 65); // place dropdown at x, y on canvas
         this.select2.style('font-size', '12px');
         this.select2.style('color', 'blueviolet');
         this.select2.style('background-color', 'lavender');
@@ -100,8 +126,8 @@ function HousePricing() {
         }
 
         this.select3 = createSelect(); // create dropdown menu in DOM
-        this.select3.position(this.layout.rightMargin * 1, height - 65); // place dropdown at x, y on canvas
-        this.select3.style('font-size', '14px');
+        this.select3.position(this.layout.rightMargin * 1, height - 30); // place dropdown at x, y on canvas
+        this.select3.style('font-size', '18px');
         this.select3.style('color', 'blueviolet');
         this.select3.style('background-color', 'lavender');
         this.select3.style('text-align', 'center');
@@ -111,18 +137,21 @@ function HousePricing() {
         }
 
         // count the number of frames drawn since the visualisation started to animate the plot
-        this.frameCount = 0;
+        // this.frameCount = 0;
 
         noLoop();
 
     }; // end setup
 
     this.destroy = function() {
+        // this.select.remove();
         this.select2.remove();
         this.select3.remove();
+        this.regressionLine = [];
     };
 
     this.draw = function() {
+        push();
         if (!this.loaded) {
             console.log('Data not yet loaded');
             return;
@@ -149,6 +178,7 @@ function HousePricing() {
             this.yAxisLabel,
             this.layout);
 
+        // drawDropDownTitle("Data to Show", this.layout); // left drop down
         drawDropDownTitle2("Outliers to Remove", this.layout); // right sub drop down
         drawDropDownTitle3("Goodness-of-Fit", this.layout); // right drop down
 
@@ -167,13 +197,14 @@ function HousePricing() {
             pop();
         }
 
-        // Plot all pay gaps between smallest size (x value) and largest size (x value) using the width of the canvas minus margins.
+        // Plot all pay gaps between smallest size (x value) and largest size (x value)
+        // using the width of the canvas minus margins.
         let previous;
 
-        // Count the number of days plotted each frame to create animation effect.
-        let xAxisCount = 0;
+        // // Count the number of days plotted each frame to create animation effect.
+        // let xAxisCount = 0;
 
-        if (goodness === "r-squared" && outliers === '0') { // when drop down value selected, draw regression line and value
+        if (goodness === "r-squared" && outliers === '0') { // when drop down value selected draw regression line and value
 
             this.slopeLine = this.linearRegressionSlope(this.salesPrice, this.propertySize); // calculate regression line slope
             this.intercept = this.linearRegressionIntercept(this.salesPrice, this.propertySize, this.slopeLine); // calculate regression line Y intercept
@@ -191,15 +222,15 @@ function HousePricing() {
             }
 
             push();
-            fill(139, 0, 139);
+            fill(25, 25, 112);
             textStyle(BOLD);
-            textSize(20);
+            textSize(22);
             text("Goodness-of-fit:", width * 0.75, 170)
             text("R-Squared = " + this.r2 + "%", width * 0.75, 200);
             pop();
             push();
             fill(0, 150, 0, 100);
-            ellipse(320, this.layout.topMargin + this.pad, 100, 40); // ellipse to highlight outliers
+            ellipse(320, this.layout.topMargin + this.pad, 100, 40);
             fill(0, 150, 0);
             textStyle(BOLD);
             textSize(22);
@@ -216,19 +247,19 @@ function HousePricing() {
                     'price': this.regressionLine[i], // y values
                 };
 
-                if (previous != null) { // draw initial regression line
+                if (previous != null) {
                     // Draw line segment connecting previous value to current value
+                    //console.log(current.size, current.price);
                     push();
                     stroke(139, 0, 139);
-                    strokeWeight(4);
-                    setLineDash([4, 10]); // dashed line
+                    strokeWeight(3);
                     line(this.mapSizeToWidth(previous.size),
                         this.mapPriceToHeight(previous.price),
                         this.mapSizeToWidth(current.size),
                         this.mapPriceToHeight(current.price));
                     pop();
 
-                    xAxisCount++;
+                    // xAxisCount++;
 
                 }; // end if
 
@@ -239,7 +270,7 @@ function HousePricing() {
 
             // Count the number of frames since this visualisation started; used in creating the
             // animation effect and to stop the main p5 draw loop when all days have been drawn.
-            this.frameCount++;
+            // this.frameCount++;
 
         } // end if
 
@@ -264,19 +295,20 @@ function HousePricing() {
             ellipse(320, this.layout.topMargin + this.pad, 100, 40); // highlight extreme outliers
 
             // when this.removeOutliers is != 0
-            if (this.salesPrice.length > this.baseArray - this.removeOutliers) { // if number of sales prices greater than base array minus outliers to remove
-                for (let i = 0; i < this.removeOutliers; i++) { // number of outliers to remove
-                    let max = Math.max(...this.salesPrice); // identify max price
-                    let maxIdx = this.salesPrice.indexOf(max); // identify index of max price
-                    this.salesPriceTemp.push(this.salesPrice[maxIdx]); // push price to temp array, based on maxIdx
-                    this.propertySizeTemp.push(this.propertySize[maxIdx]); // push property size to temp array, based on maxIdx
-                    this.salesPrice.splice(maxIdx, 1); // remove price based on maxIdx from working array
-                    this.propertySize.splice(maxIdx, 1); // remove property size based on maxIdx from working array
+            if (this.salesPrice.length > this.baseArray - this.removeOutliers) {
+                for (let i = 0; i < this.removeOutliers; i++) {
+                    let max = Math.max(...this.salesPrice);
+                    let maxIdx = this.salesPrice.indexOf(max);
+                    this.salesPriceTemp.push(this.salesPrice[maxIdx]);
+                    this.propertySizeTemp.push(this.propertySize[maxIdx]);
+                    this.salesPrice.splice(maxIdx, 1);
+                    this.propertySize.splice(maxIdx, 1);
                 }
 
-                // calculated linear regression terms after outliers have been removed from above calculations
-                this.slopeLine = this.linearRegressionSlope(this.salesPrice, this.propertySize); // calculate slope
-                this.intercept = this.linearRegressionIntercept(this.salesPrice, this.propertySize, this.slopeLine); // calculate intercept
+                console.log(this.salesPrice.length, this.propertySize.length);
+
+                this.slopeLine = this.linearRegressionSlope(this.salesPrice, this.propertySize);
+                this.intercept = this.linearRegressionIntercept(this.salesPrice, this.propertySize, this.slopeLine);
                 this.r2 = this.linearRegressionR(this.salesPrice, this.propertySize);
                 this.r2 = Math.round(this.r2 * 1000) / 10;
 
@@ -294,12 +326,11 @@ function HousePricing() {
                         'price': this.regressionLine[i], // y values
                     };
 
-                    if (previous != null) { // draw regression line
+                    if (previous != null) {
                         // Draw line segment connecting previous value to current value
                         push();
-                        stroke(0, 0, 139);
-                        strokeWeight(4);
-                        setLineDash([1, 10]); // dashed line
+                        stroke(139, 0, 139);
+                        strokeWeight(3);
                         line(this.mapSizeToWidth(previous.size),
                             this.mapPriceToHeight(previous.price),
                             this.mapSizeToWidth(current.size),
@@ -319,8 +350,10 @@ function HousePricing() {
                     this.salesPrice.push(this.salesPriceTemp[i]);
                     this.propertySize.push(this.propertySizeTemp[i]);
                 }
+
             }
         } // end removeOutliers
+        pop();
 
     }; // end draw
 
@@ -366,6 +399,7 @@ function HousePricing() {
         for (let i = 0; i < value; i++) {
             let max = Math.max(...this.salesPrice);
             let maxIdx = this.salesPrice.indexOf(max);
+            console.log(max, maxIdx);
             this.salesPrice.splice(maxIdx, 1);
             this.propertySize.splice(maxIdx, 1);
         }
@@ -398,6 +432,7 @@ function HousePricing() {
             let n = price.length;
             let sum_size = 0;
             let sum_price = 0;
+
 
             for (let i = 0; i < price.length; i++) {
 

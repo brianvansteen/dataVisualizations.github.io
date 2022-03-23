@@ -57,7 +57,12 @@ function PieChartLabels(x, y, diameter) {
                     push();
                     fill(255);
                     noStroke();
-                    textSize(30)
+                    textStyle(BOLD);
+                    textAlign(CENTER, CENTER);
+                    textWrap(WORD);
+                    textSize(16)
+                    text(labels[i], mouseX, mouseY - 20);
+                    textSize(20);
                     text(int(data[i]) + "%", mouseX, mouseY); // pie slice value printed over slice as mouse hovers
                     pop();
                 }

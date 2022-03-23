@@ -19,8 +19,6 @@ function setup() {
     gallery.addVisual(new PayGapTimeSeries()); // line graph
     gallery.addVisual(new UKFoodNutrients()); // multi-line graph
     gallery.addVisual(new ClimateChange()); // line graph
-
-    //gallery.addVisual(new Waffle());
 }
 
 function draw() {

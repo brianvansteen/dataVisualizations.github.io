@@ -100,6 +100,7 @@ function Beverages() {
     };
 
     this.draw = function() {
+            push();
 
             this.drawTitle(); // draw the title above the plot
 
@@ -110,7 +111,7 @@ function Beverages() {
             }
             let timeOfDay = ['Totals', 'Morning', 'Afternoon', 'Evening', 'Night'];
             this.changeTime(timeOfDay.indexOf(this.select1.value())); // assign numerical index value based on selector value
-
+            pop();
         } // end draw
 
     this.drawTitle = function() {
